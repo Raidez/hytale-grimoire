@@ -1,0 +1,45 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.spell_firebomb.name",
+        "Description": "server.items.spell_firebomb.desc"
+    },
+    "Icon": "Icons/ItemsGenerated/Recipe_Page.png",
+    "Categories": [
+        "Items.Ingredients"
+    ],
+    "PlayerAnimationsId": "Item",
+    "Tags": {
+        "Type": [
+            "Ingredient"
+        ]
+    },
+    "ItemSoundSetId": "ISS_Blocks_Stone",
+    "Recipe": {
+        "BenchRequirement": [
+            {
+                "Id": "LecternBench",
+                "Categories": [
+                    "LecternBench_Spells"
+                ]
+            }
+        ],
+        "Input": [
+            {
+                "ItemId": "Ingredient_Blank_Scroll",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Ingredient_Magic_Ink",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Ingredient_Fire_Essence",
+                "Quantity": 1
+            }
+        ]
+    },
+    "Quality": "Rare",
+    "MaxStack": 1,
+    "Model": "Items/Consumables/Recipes/Recipe.blockymodel",
+    "Texture": "Items/Consumables/Recipes/Recipe_Texture.png"
+}

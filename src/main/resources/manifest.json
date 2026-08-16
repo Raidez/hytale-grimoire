@@ -1,0 +1,26 @@
+{
+    "Group": "dev.raidez",
+    "Name": "grimoire",
+    "Version": "0.1.0",
+    "Description": "Add magic to your world!",
+    "Authors": [
+        {
+            "Name": "Raidez"
+        }
+    ],
+    "Website": "https://your-plugin-website.com",
+    "DisabledByDefault": false,
+    "IncludesAssetPack": true,
+    "Dependencies": {
+        "Hytale:AssetModule": "*",
+        "Hytale:EntityModule": "*"
+    },
+    "OptionalDependencies": {
+        
+    },
+    "ServerVersion": ">=0.5.3 <0.6.0",
+    "Main": "dev.raidez.GrimoirePlugin",
+    "UpdateChecker": {
+        "CurseForge": ""
+    }
+}

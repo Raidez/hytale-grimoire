@@ -1,0 +1,75 @@
+{
+  "Physics": {
+    "Type": "Standard",
+    "Gravity": 5,
+    "SticksVertically": true,
+    "RotationMode": "Velocity",
+    "TerminalVelocityAir": 150,
+    "TerminalVelocityWater": 15
+  },
+  "Model": "Fireball",
+  "LaunchForce": 30,
+  "Interactions": {
+    "ProjectileHit": {
+      "Interactions": [
+        {
+          "$Comment": "Damage the target and apply burn effect",
+          "Type": "DamageEntity",
+          "Entity": "Target",
+          "DamageCalculator": {
+            "BaseDamage": {
+              "Fire": 12
+            }
+          },
+          "DamageEffects": {
+            "WorldSoundEventId": "SFX_Flame_Ignite",
+            "WorldParticles": [
+              {
+                "SystemId": "Impact_Fire"
+              }
+            ],
+            "Knockback": {
+              "Type": "Force",
+              "Force": 10,
+              "VelocityType": "Set",
+              "Direction": {
+                "X": 0,
+                "Y": 2,
+                "Z": -5
+              }
+            }
+          },
+          "Next": {
+            "Type": "ApplyEffect",
+            "Entity": "Target",
+            "EffectId": "Burn"
+          }
+        },
+        {
+          "$Comment": "Remove the fireball entity after missing",
+          "Type": "RemoveEntity",
+          "Entity": "User"
+        }
+      ]
+    },
+    "ProjectileMiss": {
+      "Interactions": [
+        {
+          "$Comment": "Place fire on the ground where the fireball lands",
+          "Type": "PlaceFluid",
+          "FluidToPlace": "Fire",
+          "RemoveItemInHand": false,
+          "Effects": {
+            "WorldSoundEventId": "SFX_Flame_Build"
+          }
+        },
+        {
+          "$Comment": "Remove the fireball entity after missing",
+          "Type": "RemoveEntity",
+          "Entity": "User"
+        }
+      ]
+    }
+  },
+  "UseModelScale": true
+}

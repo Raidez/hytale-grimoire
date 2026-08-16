@@ -1,0 +1,35 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.ingredient_blank_scroll.name",
+    "Description": "server.items.ingredient_blank_scroll.desc"
+  },
+  "Icon": "Icons/ItemsGenerated/Recipe_Page.png",
+  "Categories": [
+    "Items.Ingredients"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Ingredient"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "DropOnDeath": true,
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "LecternBench",
+        "Categories": [
+          "LecternBench_Misc"
+        ]
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Ingredient_Hide_Light",
+        "Quantity": 1
+      }
+    ]
+  },
+  "Quality": "Common"
+}
