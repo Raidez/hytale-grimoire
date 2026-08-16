@@ -1,14 +1,7 @@
 {
     "Interactions": [
         {
-            "Type": "Replace",
-            "Var": "Var_Grimoire_Spell",
-            "DefaultOk": true,
-            "DefaultValue": {
-                "Interactions": [
-                    "Spell_Fireball"
-                ]
-            }
+            "Type": "CastSpell"
         }
     ]
 }

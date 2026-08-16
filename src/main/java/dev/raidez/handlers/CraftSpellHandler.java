@@ -1,31 +1,41 @@
 package dev.raidez.handlers;
 
-import java.util.List;
+import java.util.Map;
 
 import com.hypixel.hytale.server.core.event.events.player.PlayerCraftEvent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 
-import dev.raidez.metadata.Spell;
+import dev.raidez.metadata.SpellMetadata;
 
 public class CraftSpellHandler {
 
-    private static List<String> spellList = List.of(
+    private static Map<String, SpellMetadata> spellMap = Map.of(
             "Spell_Fireball",
-            "Spell_IceShard",
-            "Spell_LightningBolt",
-            "Spell_HealingWave",
-            "Spell_Shield",
-            "Spell_Teleportation",
-            "Spell_SummonCreature",
-            "Spell_Invisibility",
-            "Spell_Fear",
-            "Spell_Levitation");
+            SpellMetadata.builder()
+                    .name("Fireball")
+                    .description("A powerful fireball spell that deals damage to enemies.")
+                    .level(1)
+                    .castTime(1.0)
+                    .cooldown(3.0)
+                    .manaCost(5.0)
+                    .interaction("Interaction_Spell_Fireball")
+                    .build(),
+            "Spell_Firebomb",
+            SpellMetadata.builder()
+                    .name("Firebomb")
+                    .description("A fiery bomb that explodes on impact, dealing area damage.")
+                    .level(2)
+                    .castTime(3.0)
+                    .cooldown(8.0)
+                    .manaCost(15.0)
+                    .interaction("Interaction_Spell_Firebomb")
+                    .build());
 
     public static void onCraftSpell(PlayerCraftEvent event) {
         // Check if the crafted item is in the spell list
         var output = event.getCraftedRecipe().getPrimaryOutput();
-        if (!spellList.contains(output.getItemId()))
+        if (!spellMap.containsKey(output.getItemId()))
             return;
 
         // Get player inventory
@@ -50,16 +60,9 @@ public class CraftSpellHandler {
     }
 
     private static ItemStack ensureMetadata(ItemStack is) {
-        var spell = is.getFromMetadataOrDefault(Spell.METADATA_KEY, Spell.CODEC);
-        spell = Spell.builder(spell)
-                .name("Fireball")
-                .description("A powerful fireball spell that deals damage to enemies.")
-                .level(1)
-                .castTime(2)
-                .cooldown(5)
-                .manaCost(10)
-                .build();
-        return is.withMetadata(Spell.KEYED_CODEC, spell);
+        var meta = is.getFromMetadataOrDefault(SpellMetadata.METADATA_KEY, SpellMetadata.CODEC);
+        meta = spellMap.get(is.getItemId());
+        return is.withMetadata(SpellMetadata.KEYED_CODEC, meta);
     }
 
 }

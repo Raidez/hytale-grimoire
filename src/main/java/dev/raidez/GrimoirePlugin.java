@@ -1,19 +1,18 @@
 package dev.raidez;
 
-import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.event.events.player.PlayerCraftEvent;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import dev.raidez.components.SpellComponent;
+import dev.raidez.handlers.CraftGrimoireHandler;
 import dev.raidez.handlers.CraftSpellHandler;
+import dev.raidez.interactions.CastSpellInteraction;
+import dev.raidez.interactions.ChangeSpellInteraction;
 
 public class GrimoirePlugin extends JavaPlugin {
 
     private static GrimoirePlugin instance;
-
-    private ComponentType<EntityStore, SpellComponent> spellComponentType;
 
     public GrimoirePlugin(JavaPluginInit init) {
         super(init);
@@ -22,17 +21,21 @@ public class GrimoirePlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
-
+        // Register handlers
         this.getEventRegistry()
                 .registerGlobal(PlayerCraftEvent.class, CraftSpellHandler::onCraftSpell);
+        this.getEventRegistry()
+                .registerGlobal(PlayerCraftEvent.class, CraftGrimoireHandler::onCraftGrimoire);
+
+        // Register interactions
+        this.getCodecRegistry(Interaction.CODEC)
+                .register("CastSpell", CastSpellInteraction.class, CastSpellInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+                .register("ChangeSpell", ChangeSpellInteraction.class, ChangeSpellInteraction.CODEC);
     }
 
     public static GrimoirePlugin get() {
         return instance;
-    }
-
-    public ComponentType<EntityStore, SpellComponent> getSpellComponentType() {
-        return this.spellComponentType;
     }
 
 }

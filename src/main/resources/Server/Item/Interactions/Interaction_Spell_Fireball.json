@@ -34,7 +34,7 @@
                         "Interactions": [
                             {
                                 "Type": "Projectile",
-                                "Config": "ProjectileConfig_Spell_Firebomb",
+                                "Config": "ProjectileConfig_Spell_Fireball",
                                 "Effects": {
                                     "ItemAnimationId": "CastHurlCharged"
                                 }
@@ -55,7 +55,7 @@
                     }
                 ]
             },
-            "Failed": "Spell_Failed"
+            "Failed": "Interaction_Spell_Failed"
         }
     }
 }

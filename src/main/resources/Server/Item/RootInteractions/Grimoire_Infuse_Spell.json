@@ -1,0 +1,26 @@
+{
+  "Interactions": [
+    {
+      "Type": "Condition",
+      "Crouching": true,
+      "Next": {
+        "Type": "BlockCondition",
+        "Matchers": [
+          {
+            "Block": {
+              "Id": "Bench_Lectern"
+            }
+          }
+        ],
+        "Next": {
+          "Type": "SendMessage",
+          "Message": "Mesasa"
+        },
+        "Failed": "UseBlock"
+      },
+      "Failed": {
+        "Type": "OpenItemStackContainer"
+      }
+    }
+  ]
+}

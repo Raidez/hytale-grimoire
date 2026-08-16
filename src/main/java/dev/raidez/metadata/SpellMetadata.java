@@ -10,7 +10,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
  * 
  * Spell.builder().name("MySpell").level(1).build();
  */
-public class Spell {
+public class SpellMetadata {
 
     private String name;
     private String description;
@@ -18,29 +18,36 @@ public class Spell {
     private double castTime;
     private double cooldown;
     private double manaCost;
+    private String interaction;
 
-    public static final BuilderCodec<Spell> CODEC = BuilderCodec
-            .builder(Spell.class, Spell::new)
+    /**** CODEC ****/
+
+    public static final BuilderCodec<SpellMetadata> CODEC = BuilderCodec
+            .builder(SpellMetadata.class, SpellMetadata::new)
             .append(new KeyedCodec<>("Name", Codec.STRING), (c, v) -> c.name = v, (c) -> c.name).add()
             .append(new KeyedCodec<>("Description", Codec.STRING), (c, v) -> c.description = v, (c) -> c.description).add()
             .append(new KeyedCodec<>("Level", Codec.INTEGER), (c, v) -> c.level = v, (c) -> c.level).add()
             .append(new KeyedCodec<>("CastTime", Codec.DOUBLE), (c, v) -> c.castTime = v, (c) -> c.castTime).add()
             .append(new KeyedCodec<>("Cooldown", Codec.DOUBLE), (c, v) -> c.cooldown = v, (c) -> c.cooldown).add()
             .append(new KeyedCodec<>("ManaCost", Codec.DOUBLE), (c, v) -> c.manaCost = v, (c) -> c.manaCost).add()
+            .append(new KeyedCodec<>("Interaction", Codec.STRING), (c, v) -> c.interaction = v, (c) -> c.interaction).add()
             .build();
 
-    public static final KeyedCodec<Spell> KEYED_CODEC = new KeyedCodec<>("Spell", CODEC);
+    public static final KeyedCodec<SpellMetadata> KEYED_CODEC = new KeyedCodec<>(SpellMetadata.METADATA_KEY, CODEC);
 
     public static final String METADATA_KEY = "Spell";
 
-    protected Spell() {
+    private SpellMetadata() {
         this.name = "";
         this.description = "";
         this.level = 1;
         this.castTime = 0.0;
         this.cooldown = 0.0;
         this.manaCost = 0.0;
+        this.interaction = "";
     }
+
+    /**** BUILDER ****/
 
     /**
      * Creates a new instance of the Spell class using the provided builder.
@@ -59,7 +66,7 @@ public class Spell {
      * @return a new Builder instance initialized with the values from the given
      *         Spell instance
      */
-    public static Builder builder(Spell copy) {
+    public static Builder builder(SpellMetadata copy) {
         return new BuilderImpl(copy);
     }
 
@@ -69,13 +76,14 @@ public class Spell {
      * 
      * @param builder
      */
-    private Spell(BuilderImpl builder) {
+    private SpellMetadata(BuilderImpl builder) {
         this.name = builder.name;
         this.description = builder.description;
         this.level = builder.level;
         this.castTime = builder.castTime;
         this.cooldown = builder.cooldown;
         this.manaCost = builder.manaCost;
+        this.interaction = builder.interaction;
     }
 
     /**
@@ -95,7 +103,9 @@ public class Spell {
 
         Builder manaCost(double manaCost);
 
-        Spell build();
+        Builder interaction(String interaction);
+
+        SpellMetadata build();
     }
 
     /**
@@ -109,6 +119,7 @@ public class Spell {
         private double castTime;
         private double cooldown;
         private double manaCost;
+        private String interaction;
 
         private BuilderImpl() {
             this.name = "";
@@ -117,15 +128,17 @@ public class Spell {
             this.castTime = 0.0;
             this.cooldown = 0.0;
             this.manaCost = 0.0;
+            this.interaction = "";
         }
 
-        private BuilderImpl(Spell copy) {
+        private BuilderImpl(SpellMetadata copy) {
             this.name = copy.name;
             this.description = copy.description;
             this.level = copy.level;
             this.castTime = copy.castTime;
             this.cooldown = copy.cooldown;
             this.manaCost = copy.manaCost;
+            this.interaction = copy.interaction;
         }
 
         @Override
@@ -165,59 +178,73 @@ public class Spell {
         }
 
         @Override
-        public Spell build() {
-            return new Spell(this);
+        public Builder interaction(String interaction) {
+            this.interaction = interaction;
+            return this;
+        }
+
+        @Override
+        public SpellMetadata build() {
+            return new SpellMetadata(this);
         }
     }
 
-    /******************************** ACCESSORS ********************************/
+    /**** ACCESSORS ****/
 
     public String getName() {
         return name;
     }
 
-    public Spell withName(String name) {
-        return Spell.builder(this).name(name).build();
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public Spell withDescription(String description) {
-        return Spell.builder(this).description(description).build();
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public Spell withLevel(int level) {
-        return Spell.builder(this).level(level).build();
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public double getCastTime() {
         return castTime;
     }
 
-    public Spell withCastTime(double castTime) {
-        return Spell.builder(this).castTime(castTime).build();
+    public void setCastTime(double castTime) {
+        this.castTime = castTime;
     }
 
     public double getCooldown() {
         return cooldown;
     }
 
-    public Spell withCooldown(double cooldown) {
-        return Spell.builder(this).cooldown(cooldown).build();
+    public void setCooldown(double cooldown) {
+        this.cooldown = cooldown;
     }
 
     public double getManaCost() {
         return manaCost;
     }
 
-    public Spell withManaCost(double manaCost) {
-        return Spell.builder(this).manaCost(manaCost).build();
+    public void setManaCost(double manaCost) {
+        this.manaCost = manaCost;
+    }
+
+    public String getInteraction() {
+        return interaction;
+    }
+
+    public void setInteraction(String interaction) {
+        this.interaction = interaction;
     }
 
 }
