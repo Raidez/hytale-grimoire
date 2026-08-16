@@ -8,7 +8,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.components.SpellComponent;
 import dev.raidez.handlers.CraftSpellHandler;
-import dev.raidez.systems.SpellSystems;
 
 public class GrimoirePlugin extends JavaPlugin {
 
@@ -26,11 +25,6 @@ public class GrimoirePlugin extends JavaPlugin {
 
         this.getEventRegistry()
                 .registerGlobal(PlayerCraftEvent.class, CraftSpellHandler::onCraftSpell);
-
-        this.spellComponentType = this.getEntityStoreRegistry()
-                .registerComponent(SpellComponent.class, SpellComponent::new);
-        this.getEntityStoreRegistry()
-                .registerSystem(new SpellSystems.EnsureSpellComponents());
     }
 
     public static GrimoirePlugin get() {

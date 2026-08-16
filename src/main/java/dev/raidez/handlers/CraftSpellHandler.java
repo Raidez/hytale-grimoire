@@ -6,6 +6,8 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerCraftEvent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 
+import dev.raidez.metadata.Spell;
+
 public class CraftSpellHandler {
 
     private static List<String> spellList = List.of(
@@ -42,13 +44,22 @@ public class CraftSpellHandler {
             if (!output.getItemId().equals(is.getItemId()))
                 continue;
 
-            // var newIs = ensureMetadata(is);
-            // inventory.replaceItemStackInSlot(slot, is, newIs);
+            var newIs = ensureMetadata(is);
+            inventory.replaceItemStackInSlot(slot, is, newIs);
         }
     }
 
     private static ItemStack ensureMetadata(ItemStack is) {
-        return ItemStack.EMPTY;
+        var spell = is.getFromMetadataOrDefault(Spell.METADATA_KEY, Spell.CODEC);
+        spell = Spell.builder(spell)
+                .name("Fireball")
+                .description("A powerful fireball spell that deals damage to enemies.")
+                .level(1)
+                .castTime(2)
+                .cooldown(5)
+                .manaCost(10)
+                .build();
+        return is.withMetadata(Spell.KEYED_CODEC, spell);
     }
 
 }

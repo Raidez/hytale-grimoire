@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import dev.raidez.metadata.SpellMetadata;
+import dev.raidez.metadata.Spell;
 
 public class TestCommand extends AbstractPlayerCommand {
 
@@ -31,15 +31,17 @@ public class TestCommand extends AbstractPlayerCommand {
         if (is == null || hotbar == null)
             return;
 
-        var spellMeta = is.getFromMetadataOrDefault("Spell", SpellMetadata.CODEC);
-        spellMeta.setName("Fireball");
-        spellMeta.setDescription("Launches a fiery projectile that explodes on impact.");
-        spellMeta.setLevel(1);
-        spellMeta.setManaCost(5.0f);
-        spellMeta.setCastTime(2.0f);
-        spellMeta.setCooldown(3.0f);
+        var spell = is.getFromMetadataOrDefault(Spell.METADATA_KEY, Spell.CODEC);
+        Spell.builder(spell)
+                .name("Fireball")
+                .description("A powerful fireball spell that deals damage to enemies.")
+                .level(1)
+                .castTime(2)
+                .cooldown(5)
+                .manaCost(10)
+                .build();
 
-        var edited = is.withMetadata(SpellMetadata.KEYED_CODEC, spellMeta);
+        var edited = is.withMetadata(Spell.KEYED_CODEC, spell);
 
         byte activeSlot = hotbar.getActiveSlot();
         hotbar.getInventory().replaceItemStackInSlot(activeSlot, is, edited);

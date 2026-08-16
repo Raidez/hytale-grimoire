@@ -66,7 +66,6 @@ public class SpellSystems {
 
             // Add the spell component to the holder
             var spell = holder.ensureAndGetComponent(SPELL_COMPONENT_TYPE);
-            spell.setDescription("TESTTTTTT");
         }
 
         @Override
