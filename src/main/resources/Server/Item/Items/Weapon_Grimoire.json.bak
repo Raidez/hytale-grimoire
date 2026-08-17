@@ -1,9 +1,29 @@
 {
+  "Metadata": {
+    "SpellSlot1": {
+      "Type": "string",
+      "Default": "Spell_Fireball"
+    },
+    "SpellSlot2": {
+      "Type": "string",
+      "Default": ""
+    },
+    "SelectedSpellSlot": {
+      "Type": "number",
+      "Default": 1
+    },
+    "SelectedSpell": {
+      "Type": "string",
+      "Default": "Spell_Fireball"
+    }
+  },
   "TranslationProperties": {
     "Name": "server.items.weapon_grimoire.name",
     "Description": "server.items.weapon_grimoire.desc"
   },
-  "Categories": [ "Items.Weapons" ],
+  "Categories": [
+    "Items.Weapons"
+  ],
   "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Purple.png",
   "Quality": "Epic",
   "Model": "Items/Weapons/Spellbook/Grimoire.blockymodel",
@@ -11,8 +31,15 @@
   "PlayerAnimationsId": "Spellbook",
   "IconProperties": {
     "Scale": 0.745,
-    "Translation": [ -7.8, -7.8 ],
-    "Rotation": [ 45, 90, 0 ]
+    "Translation": [
+      -7.8,
+      -7.8
+    ],
+    "Rotation": [
+      45,
+      90,
+      0
+    ]
   },
   "Interactions": {
     "Primary": "Grimoire_Cast_Spell",
@@ -22,8 +49,12 @@
   "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
   "Scale": 1.2,
   "Tags": {
-    "Type": [ "Weapon" ],
-    "Family": [ "Spellbook" ]
+    "Type": [
+      "Weapon"
+    ],
+    "Family": [
+      "Spellbook"
+    ]
   },
   "Weapon": {
     "StatModifiers": {
@@ -40,7 +71,9 @@
     "BenchRequirement": [
       {
         "Id": "LecternBench",
-        "Categories": [ "LecternBench_Misc" ]
+        "Categories": [
+          "LecternBench_Misc"
+        ]
       }
     ],
     "Input": [

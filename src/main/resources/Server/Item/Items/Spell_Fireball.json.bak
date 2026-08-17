@@ -47,9 +47,7 @@
   },
   "InteractionVars": {
     "Var_Spell_Effect": {
-      "Interactions": [
-        "Fireball_Effect"
-      ]
+      "Interactions": [ "Interaction_Spell_Fireball" ]
     }
   }
 }

@@ -1,0 +1,29 @@
+{
+  "Type": "Parallel",
+  "Interactions": [
+    {
+      "$Comment": "Launch projectile",
+      "Interactions": [
+        {
+          "Type": "Projectile",
+          "Config": "ProjectileConfig_Spell_Fireball",
+          "Effects": {
+            "ItemAnimationId": "CastHurlCharged"
+          }
+        }
+      ]
+    },
+    {
+      "$Comment": "Play sound effect",
+      "Interactions": [
+        {
+          "Type": "Simple",
+          "RunTime": 0.5,
+          "Effects": {
+            "WorldSoundEventId": "SFX_Staff_Flame_Fireball_Impact"
+          }
+        }
+      ]
+    }
+  ]
+}

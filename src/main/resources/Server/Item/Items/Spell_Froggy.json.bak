@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.spell_fireball.name",
-    "Description": "server.items.spell_fireball.desc"
+    "Name": "server.items.spell_froggy.name",
+    "Description": "server.items.spell_froggy.desc"
   },
   "Icon": "Icons/ItemsGenerated/Recipe_Page.png",
   "Categories": [
@@ -33,7 +33,7 @@
         "Quantity": 1
       },
       {
-        "ItemId": "Ingredient_Fire_Essence",
+        "ItemId": "Potion_Morph_Frog",
         "Quantity": 1
       }
     ]
@@ -43,13 +43,6 @@
   "Model": "Items/Consumables/Recipes/Recipe.blockymodel",
   "Texture": "Items/Consumables/Recipes/Recipe_Texture.png",
   "Interactions": {
-    "Use": "Spell_Cast_Spell"
-  },
-  "InteractionVars": {
-    "Var_Spell_Effect": {
-      "Interactions": [
-        "Fireball_Effect"
-      ]
-    }
+    "Use": "Cast_Spell_Fireball"
   }
 }
