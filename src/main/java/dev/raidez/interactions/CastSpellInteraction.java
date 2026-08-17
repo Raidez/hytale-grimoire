@@ -5,7 +5,6 @@ import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
-import com.hypixel.hytale.server.core.inventory.container.ItemStackItemContainer;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
@@ -43,38 +42,19 @@ public class CastSpellInteraction extends SimpleInstantInteraction {
         // Get the spell to cast
         if (meta.getSpellIndex() < 0 || meta.getSpellIndex() >= meta.getSpellList().length)
             return;
+
         var spellId = meta.getSpellList()[meta.getSpellIndex()];
-
-        // Get the container of the grimoire (@see OpenItemStackContainerInteraction)
-        var interaction = "";
-        var container = ItemStackItemContainer
-                .ensureConfiguredContainer(
-                        context.getHeldItemContainer(),
-                        context.getHeldItemSlot(),
-                        is.getItem().getItemStackContainerConfig());
-
-        // Retrieve the spell in the containers
-        SpellMetadata spellmeta = null;
-        for (short i = 0; i < container.getCapacity(); i++) {
-            var iss = container.getItemStack(i);
-            if (iss == null || iss.isEmpty())
-                continue;
-
-            // Check if the spell matches the one in the grimoire
-            spellmeta = iss.getFromMetadataOrDefault(SpellMetadata.METADATA_KEY, SpellMetadata.CODEC);
-            if (!spellmeta.getName().equals(spellId))
-                continue;
-
-            interaction = spellmeta.getInteraction();
-            break;
-        }
+        var spell = SpellMetadata.spellMap.get(spellId);
+        if (spell == null)
+            return;
 
         // Cast the spell interaction
+        var interaction = spell.getInteraction();
         if (interaction == null || interaction.isEmpty())
             return;
 
         // Send a message to the player about the spell being cast
-        var spellName = Message.translation(spellmeta.getName());
+        var spellName = Message.translation(spell.getName());
         playerRef.sendMessage(Message.join(Message.raw("Casting spell: "), spellName));
         context.getState().state = InteractionState.Finished;
         context.execute(RootInteraction.getRootInteractionOrUnknown(interaction));

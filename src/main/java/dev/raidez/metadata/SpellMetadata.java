@@ -1,5 +1,7 @@
 package dev.raidez.metadata;
 
+import java.util.Map;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -11,6 +13,38 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
  * Spell.builder().name("MySpell").level(1).build();
  */
 public class SpellMetadata {
+
+    public static Map<String, SpellMetadata> spellMap = Map.of(
+            "Spell_Fireball",
+            SpellMetadata.builder()
+                    .name("items.spell_fireball.shortName")
+                    .description("items.spell_fireball.desc")
+                    .level(1)
+                    .castTime(1.0)
+                    .cooldown(3.0)
+                    .manaCost(5.0)
+                    .interaction("Cast_Spell_Fireball")
+                    .build(),
+            "Spell_Firebomb",
+            SpellMetadata.builder()
+                    .name("items.spell_firebomb.shortName")
+                    .description("items.spell_firebomb.desc")
+                    .level(2)
+                    .castTime(3.0)
+                    .cooldown(8.0)
+                    .manaCost(15.0)
+                    .interaction("Cast_Spell_Firebomb")
+                    .build(),
+            "Spell_Froggy",
+            SpellMetadata.builder()
+                    .name("items.spell_froggy.shortName")
+                    .description("items.spell_froggy.desc")
+                    .level(2)
+                    .castTime(3.0)
+                    .cooldown(8.0)
+                    .manaCost(15.0)
+                    .interaction("Cast_Spell_Froggy")
+                    .build());
 
     private String name;
     private String description;
@@ -25,12 +59,14 @@ public class SpellMetadata {
     public static final BuilderCodec<SpellMetadata> CODEC = BuilderCodec
             .builder(SpellMetadata.class, SpellMetadata::new)
             .append(new KeyedCodec<>("Name", Codec.STRING), (c, v) -> c.name = v, (c) -> c.name).add()
-            .append(new KeyedCodec<>("Description", Codec.STRING), (c, v) -> c.description = v, (c) -> c.description).add()
+            .append(new KeyedCodec<>("Description", Codec.STRING), (c, v) -> c.description = v, (c) -> c.description)
+            .add()
             .append(new KeyedCodec<>("Level", Codec.INTEGER), (c, v) -> c.level = v, (c) -> c.level).add()
             .append(new KeyedCodec<>("CastTime", Codec.DOUBLE), (c, v) -> c.castTime = v, (c) -> c.castTime).add()
             .append(new KeyedCodec<>("Cooldown", Codec.DOUBLE), (c, v) -> c.cooldown = v, (c) -> c.cooldown).add()
             .append(new KeyedCodec<>("ManaCost", Codec.DOUBLE), (c, v) -> c.manaCost = v, (c) -> c.manaCost).add()
-            .append(new KeyedCodec<>("Interaction", Codec.STRING), (c, v) -> c.interaction = v, (c) -> c.interaction).add()
+            .append(new KeyedCodec<>("Interaction", Codec.STRING), (c, v) -> c.interaction = v, (c) -> c.interaction)
+            .add()
             .build();
 
     public static final KeyedCodec<SpellMetadata> KEYED_CODEC = new KeyedCodec<>(SpellMetadata.METADATA_KEY, CODEC);

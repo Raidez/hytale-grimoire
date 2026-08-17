@@ -38,7 +38,7 @@ public class CraftGrimoireHandler {
     private static ItemStack ensureMetadata(ItemStack is) {
         var meta = is.getFromMetadataOrDefault(GrimoireMetadata.METADATA_KEY, GrimoireMetadata.CODEC);
         meta.setSpellIndex((short) 0);
-        meta.setSpellList(new String[] { "Fireball", "Firebomb" });
+        meta.setSpellList(new String[] { "Spell_Fireball" });
         return is.withMetadata(GrimoireMetadata.KEYED_CODEC, meta);
     }
 
