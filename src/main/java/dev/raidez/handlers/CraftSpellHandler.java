@@ -13,23 +13,23 @@ public class CraftSpellHandler {
     private static Map<String, SpellMetadata> spellMap = Map.of(
             "Spell_Fireball",
             SpellMetadata.builder()
-                    .name("Fireball")
-                    .description("A powerful fireball spell that deals damage to enemies.")
+                    .name("items.spell_fireball.shortName")
+                    .description("items.spell_fireball.desc")
                     .level(1)
                     .castTime(1.0)
                     .cooldown(3.0)
                     .manaCost(5.0)
-                    .interaction("Interaction_Spell_Fireball")
+                    .interaction("Cast_Spell_Fireball")
                     .build(),
             "Spell_Firebomb",
             SpellMetadata.builder()
-                    .name("Firebomb")
-                    .description("A fiery bomb that explodes on impact, dealing area damage.")
+                    .name("items.spell_firebomb.shortName")
+                    .description("items.spell_firebomb.desc")
                     .level(2)
                     .castTime(3.0)
                     .cooldown(8.0)
                     .manaCost(15.0)
-                    .interaction("Interaction_Spell_Firebomb")
+                    .interaction("Cast_Spell_Firebomb")
                     .build());
 
     public static void onCraftSpell(PlayerCraftEvent event) {

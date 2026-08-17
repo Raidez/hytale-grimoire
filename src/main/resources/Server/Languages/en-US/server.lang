@@ -1,21 +1,23 @@
-items.bench_lectern.name=Lectern
-items.bench_lectern.desc=A lectern for writing spells and putting them in your grimoire.
+items.bench_lectern.name = Lectern
+items.bench_lectern.desc = A lectern for writing spells and putting them in your grimoire.
 
-benchCategories.spells=Spells
-benchCategories.misc=Misc
-benchCategories.colors=Colors
+benchCategories.spells = Spells
+benchCategories.misc = Misc
+benchCategories.colors = Colors
 
-items.ingredient_magic_ink.name=Magic Ink
-items.ingredient_magic_ink.desc=Ink infused with magical properties, used for writing spells.
+items.ingredient_magic_ink.name = Magic Ink
+items.ingredient_magic_ink.desc = Ink infused with magical properties, used for writing spells.
 
-items.ingredient_blank_scroll.name=Blank Scroll
-items.ingredient_blank_scroll.desc=A blank scroll used for writing spells.
+items.ingredient_blank_scroll.name = Blank Scroll
+items.ingredient_blank_scroll.desc = A blank scroll used for writing spells.
 
-items.spell_fireball.name=Fireball Spell
-items.spell_fireball.desc=A spell that conjures a ball of fire to hurl at your enemies.
+items.weapon_grimoire.name = Grimoire
+items.weapon_grimoire.desc = A magical book that allows you to store and cast spells.
 
-items.spell_firebomb.name = Firebomb spell
-items.spell_firebomb.desc = A spell that creates a fiery explosion upon impact.
+items.spell_fireball.name = Fireball Spell
+items.spell_fireball.shortName = Fireball
+items.spell_fireball.desc = A powerful fireball spell that deals damage to enemies.
 
-items.weapon_grimoire.name=Grimoire
-items.weapon_grimoire.desc=A magical book that allows you to store and cast spells.
+items.spell_firebomb.name = Firebomb Spell
+items.spell_firebomb.shortName = Firebomb
+items.spell_firebomb.desc = A fiery bomb that explodes on impact, dealing area damage.
