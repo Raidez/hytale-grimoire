@@ -9,6 +9,7 @@ import dev.raidez.handlers.CraftGrimoireHandler;
 import dev.raidez.handlers.CraftSpellHandler;
 import dev.raidez.interactions.CastSpellInteraction;
 import dev.raidez.interactions.ChangeSpellInteraction;
+import dev.raidez.interactions.InfuseSpellInteraction;
 
 public class GrimoirePlugin extends JavaPlugin {
 
@@ -32,6 +33,8 @@ public class GrimoirePlugin extends JavaPlugin {
                 .register("CastSpell", CastSpellInteraction.class, CastSpellInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
                 .register("ChangeSpell", ChangeSpellInteraction.class, ChangeSpellInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+                .register("InfuseSpell", InfuseSpellInteraction.class, InfuseSpellInteraction.CODEC);
     }
 
     public static GrimoirePlugin get() {
