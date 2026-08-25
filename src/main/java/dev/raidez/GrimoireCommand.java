@@ -2,6 +2,7 @@ package dev.raidez;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -9,9 +10,13 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.DefaultArg
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.InteractionChain;
+import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -138,9 +143,9 @@ public class GrimoireCommand extends AbstractCommandCollection {
             }
 
             // Cast the spell (for now, just send a message)
+            var interaction = "Cast_Spell_Fireball";
+            executeInteraction(interaction, store, ref);
             commandContext.sendMessage(Message.raw("Casting spell: " + spell));
-
-            // TODO: Call spell interaction
         }
     }
 
@@ -151,7 +156,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
         private final DefaultArg<Item> spellArg;
 
         enum Operation {
-            Infuse, // Infuse a spell into the grimoire in the player's hand
+            Add, // Infuse a spell into the grimoire in the player's hand
             Remove, // Remove a spell from the grimoire in the player's hand
             Purge, // Remove all spells from the grimoire in the player's hand
         }
@@ -159,7 +164,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
         public InfuseCommand() {
             super("infuse", "Infuse a spell into the grimoire in the player's hand");
             operationArg = withDefaultArg("operation", "Operation to perform",
-                    ArgTypes.forEnum("operation", Operation.class), Operation.Infuse, "infuse");
+                    ArgTypes.forEnum("operation", Operation.class), Operation.Add, "add");
             spellArg = withDefaultArg("spell", "Spell to infuse", ArgTypes.ITEM_ASSET, null, "");
         }
 
@@ -185,7 +190,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
             // Get the grimoire metadata and perform the operation
             var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
             switch (operation) {
-                case Infuse -> grimoire.addSpell(spell.getId());
+                case Add -> grimoire.addSpell(spell.getId());
                 case Remove -> grimoire.removeSpell(spell.getId());
                 case Purge -> grimoire.clearSpells();
             }
@@ -226,6 +231,27 @@ public class GrimoireCommand extends AbstractCommandCollection {
             var spells = grimoire.getSpellList();
             commandContext.sendMessage(Message.raw("Current spells in grimoire: " + String.join(", ", spells)));
         }
+    }
+
+    private void executeInteraction(
+            String interaction,
+            Store<EntityStore> store,
+            Ref<EntityStore> ref) {
+
+        var interactionManager = store.getComponent(ref, InteractionModule.get().getInteractionManagerComponent());
+        if (interactionManager == null) {
+            return;
+        }
+
+        var interactionType = InteractionType.Primary;
+        var context = InteractionContext.forInteraction(interactionManager, ref, interactionType, store);
+        var rootInteraction = RootInteraction.getRootInteractionOrUnknown(interaction);
+        if (rootInteraction == null) {
+            return;
+        }
+
+        InteractionChain chain = interactionManager.initChain(interactionType, context, rootInteraction, true);
+        interactionManager.queueExecuteChain(chain);
     }
 
 }

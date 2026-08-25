@@ -1,97 +1,76 @@
 {
-  "Metadata": {
-    "SpellSlot1": {
-      "Type": "string",
-      "Default": "Spell_Fireball"
+    "TranslationProperties": {
+        "Name": "server.items.weapon_grimoire.name",
+        "Description": "server.items.weapon_grimoire.desc"
     },
-    "SpellSlot2": {
-      "Type": "string",
-      "Default": ""
-    },
-    "SelectedSpellSlot": {
-      "Type": "number",
-      "Default": 1
-    },
-    "SelectedSpell": {
-      "Type": "string",
-      "Default": "Spell_Fireball"
-    }
-  },
-  "TranslationProperties": {
-    "Name": "server.items.weapon_grimoire.name",
-    "Description": "server.items.weapon_grimoire.desc"
-  },
-  "Categories": [
-    "Items.Weapons"
-  ],
-  "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Purple.png",
-  "Quality": "Epic",
-  "Model": "Items/Weapons/Spellbook/Grimoire.blockymodel",
-  "Texture": "Items/Weapons/Spellbook/Grimoire_Purple_Texture.png",
-  "PlayerAnimationsId": "Spellbook",
-  "IconProperties": {
-    "Scale": 0.745,
-    "Translation": [
-      -7.8,
-      -7.8
+    "Categories": [
+        "Items.Weapons"
     ],
-    "Rotation": [
-      45,
-      90,
-      0
-    ]
-  },
-  "Interactions": {
-    "Primary": "Grimoire_Cast_Spell",
-    "Secondary": "Grimoire_Change_Spell",
-    "Use": "Grimoire_Infuse_Spell"
-  },
-  "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
-  "Scale": 1.2,
-  "Tags": {
-    "Type": [
-      "Weapon"
-    ],
-    "Family": [
-      "Spellbook"
-    ]
-  },
-  "Weapon": {
-    "StatModifiers": {
-      "Mana": [
-        {
-          "CalculationType": "Additive",
-          "Amount": 100
-        }
-      ]
-    }
-  },
-  "ItemSoundSetId": "ISS_Weapons_Books",
-  "Recipe": {
-    "BenchRequirement": [
-      {
-        "Id": "LecternBench",
-        "Categories": [
-          "LecternBench_Misc"
+    "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Purple.png",
+    "Quality": "Epic",
+    "Model": "Items/Weapons/Spellbook/Grimoire.blockymodel",
+    "Texture": "Items/Weapons/Spellbook/Grimoire_Purple_Texture.png",
+    "PlayerAnimationsId": "Spellbook",
+    "IconProperties": {
+        "Scale": 0.745,
+        "Translation": [
+            -7.8,
+            -7.8
+        ],
+        "Rotation": [
+            45,
+            90,
+            0
         ]
-      }
-    ],
-    "Input": [
-      {
-        "ItemId": "Ingredient_Leather_Medium",
-        "Quantity": 2
-      },
-      {
-        "ItemId": "Ingredient_Fabric_Scrap_Linen",
-        "Quantity": 3
-      },
-      {
-        "ResourceTypeId": "Crystal_Shards",
-        "Quantity": 1
-      }
-    ]
-  },
-  "Container": {
-    "Capacity": 12
-  }
+    },
+    "Interactions": {
+        "Primary": "Grimoire_Cast_Spell",
+        "Secondary": "Grimoire_Change_Spell",
+        "Use": "Grimoire_Infuse_Spell"
+    },
+    "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
+    "Scale": 1.2,
+    "Tags": {
+        "Type": [
+            "Weapon"
+        ],
+        "Family": [
+            "Spellbook"
+        ]
+    },
+    "Weapon": {
+        "StatModifiers": {
+            "Mana": [
+                {
+                    "CalculationType": "Additive",
+                    "Amount": 100
+                }
+            ]
+        }
+    },
+    "ItemSoundSetId": "ISS_Weapons_Books",
+    "Recipe": {
+        "BenchRequirement": [
+            {
+                "Id": "LecternBench",
+                "Categories": [
+                    "LecternBench_Misc"
+                ]
+            }
+        ],
+        "Input": [
+            {
+                "ItemId": "Ingredient_Leather_Medium",
+                "Quantity": 2
+            },
+            {
+                "ItemId": "Ingredient_Fabric_Scrap_Linen",
+                "Quantity": 3
+            },
+            {
+                "ResourceTypeId": "Crystal_Shards",
+                "Quantity": 1
+            }
+        ]
+    }
 }
