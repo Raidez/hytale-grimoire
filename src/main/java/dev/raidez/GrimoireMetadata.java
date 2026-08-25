@@ -1,19 +1,25 @@
 package dev.raidez;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 
 public class GrimoireMetadata {
 
-    private String[] spellList;
+    private List<String> spellList;
     private int spellSlot;
 
     public static final String KEY = "Grimoire";
 
     public static final BuilderCodec<GrimoireMetadata> CODEC = BuilderCodec
             .builder(GrimoireMetadata.class, GrimoireMetadata::new)
-            .append(new KeyedCodec<>("SpellList", Codec.STRING_ARRAY), (c, v) -> c.spellList = v, c -> c.spellList)
+            .append(new KeyedCodec<>("SpellList", Codec.STRING_ARRAY),
+                    (c, v) -> c.spellList = new ArrayList<>(Arrays.asList(v)),
+                    c -> c.spellList.toArray(new String[0]))
             .add()
             .append(new KeyedCodec<>("SpellSlot", Codec.INTEGER), (c, v) -> c.spellSlot = v, c -> c.spellSlot)
             .add()
@@ -22,7 +28,7 @@ public class GrimoireMetadata {
     public static final KeyedCodec<GrimoireMetadata> KEYED_CODEC = new KeyedCodec<>(KEY, CODEC);
 
     public GrimoireMetadata() {
-        this.spellList = new String[0];
+        this.spellList = new ArrayList<>();
         this.spellSlot = 0;
     }
 
@@ -31,59 +37,43 @@ public class GrimoireMetadata {
     }
 
     public void changeSpellSlot(int delta) {
-        if (this.spellList.length == 0) {
+        if (this.spellList.isEmpty()) {
             return;
         }
-        this.spellSlot = (this.spellSlot + delta + this.spellList.length) % this.spellList.length;
+        this.spellSlot = (this.spellSlot + delta + this.spellList.size()) % this.spellList.size();
     }
 
-    public String[] getSpellList() {
-        return this.spellList;
+    public List<String> getSpellList() {
+        return List.copyOf(this.spellList);
     }
 
     public String getCurrentSpell() {
-        if (this.spellList.length == 0) {
+        if (this.spellList.isEmpty()) {
             return null;
         }
-        return this.spellList[this.spellSlot];
+        return this.spellList.get(spellSlot);
     }
 
     public void clearSpells() {
-        this.spellList = new String[0];
+        this.spellList = new ArrayList<>();
         this.spellSlot = 0;
     }
 
     public void addSpell(String spell) {
-        String[] newSpellList = new String[this.spellList.length + 1];
-        System.arraycopy(this.spellList, 0, newSpellList, 0, this.spellList.length);
-        newSpellList[this.spellList.length] = spell;
-        this.spellList = newSpellList;
+        this.spellList.add(spell);
     }
 
-    public void addSpells(String[] spells) {
-        String[] newSpellList = new String[this.spellList.length + spells.length];
-        System.arraycopy(this.spellList, 0, newSpellList, 0, this.spellList.length);
-        System.arraycopy(spells, 0, newSpellList, this.spellList.length, spells.length);
-        this.spellList = newSpellList;
+    public void addSpells(String... spells) {
+        this.spellList.addAll(List.of(spells));
     }
 
     public void removeSpell(String spell) {
-        int index = -1;
-        for (int i = 0; i < this.spellList.length; i++) {
-            if (this.spellList[i].equals(spell)) {
-                index = i;
-                break;
-            }
+        if (!this.spellList.remove(spell)) {
+            return;
         }
-        if (index == -1) {
-            return; // Spell not found
-        }
-        String[] newSpellList = new String[this.spellList.length - 1];
-        System.arraycopy(this.spellList, 0, newSpellList, 0, index);
-        System.arraycopy(this.spellList, index + 1, newSpellList, index, this.spellList.length - index - 1);
-        this.spellList = newSpellList;
-        if (this.spellSlot >= this.spellList.length) {
-            this.spellSlot = Math.max(0, this.spellList.length - 1);
+
+        if (this.spellSlot >= this.spellList.size()) {
+            this.spellSlot = Math.max(0, this.spellList.size() - 1);
         }
     }
 

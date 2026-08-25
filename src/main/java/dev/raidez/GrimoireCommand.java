@@ -25,6 +25,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
         addSubCommand(new SlotCommand());
         addSubCommand(new CastCommand());
         addSubCommand(new InfuseCommand());
+        addSubCommand(new CheckCommand());
     }
 
     class GiveCommand extends AbstractPlayerCommand {
@@ -47,7 +48,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
             // Add some spells to the grimoire
             grimoire.clearSpells();
-            grimoire.addSpells(new String[] { "Spell1", "Spell2", "Spell3" });
+            grimoire.addSpells("Spell1", "Spell2", "Spell3");
 
             // Update the item stack with the new metadata
             is = is.withMetadata(GrimoireMetadata.KEYED_CODEC, grimoire);
@@ -196,6 +197,34 @@ public class GrimoireCommand extends AbstractCommandCollection {
             // Send a message to the player
             commandContext.sendMessage(Message.raw("Performed operation: " + operation
                     + " on grimoire. Current spells: " + String.join(", ", grimoire.getSpellList())));
+        }
+    }
+
+    class CheckCommand extends AbstractPlayerCommand {
+
+        public CheckCommand() {
+            super("check", "Check the spells in the grimoire in the player's hand");
+        }
+
+        @Override
+        protected void execute(
+                CommandContext commandContext,
+                Store<EntityStore> store,
+                Ref<EntityStore> ref,
+                PlayerRef playerRef,
+                World world) {
+
+            // Check if the player is holding a grimoire
+            var is = InventoryComponent.getItemInHand(store, ref);
+            if (is == null || !is.getItemId().equals("Weapon_Grimoire")) {
+                commandContext.sendMessage(Message.raw("You must hold a grimoire to check its spells."));
+                return;
+            }
+
+            // Get the grimoire metadata and send the list of spells to the player
+            var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
+            var spells = grimoire.getSpellList();
+            commandContext.sendMessage(Message.raw("Current spells in grimoire: " + String.join(", ", spells)));
         }
     }
 
