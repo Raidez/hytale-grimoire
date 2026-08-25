@@ -27,7 +27,18 @@ public class GrimoireMetadata {
     }
 
     public void changeSpellSlot() {
-        this.spellSlot = (this.spellSlot + 1) % this.spellList.length;
+        changeSpellSlot(1);
+    }
+
+    public void changeSpellSlot(int delta) {
+        if (this.spellList.length == 0) {
+            return;
+        }
+        this.spellSlot = (this.spellSlot + delta + this.spellList.length) % this.spellList.length;
+    }
+
+    public String[] getSpellList() {
+        return this.spellList;
     }
 
     public String getCurrentSpell() {
@@ -54,6 +65,26 @@ public class GrimoireMetadata {
         System.arraycopy(this.spellList, 0, newSpellList, 0, this.spellList.length);
         System.arraycopy(spells, 0, newSpellList, this.spellList.length, spells.length);
         this.spellList = newSpellList;
+    }
+
+    public void removeSpell(String spell) {
+        int index = -1;
+        for (int i = 0; i < this.spellList.length; i++) {
+            if (this.spellList[i].equals(spell)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            return; // Spell not found
+        }
+        String[] newSpellList = new String[this.spellList.length - 1];
+        System.arraycopy(this.spellList, 0, newSpellList, 0, index);
+        System.arraycopy(this.spellList, index + 1, newSpellList, index, this.spellList.length - index - 1);
+        this.spellList = newSpellList;
+        if (this.spellSlot >= this.spellList.length) {
+            this.spellSlot = Math.max(0, this.spellList.length - 1);
+        }
     }
 
 }
