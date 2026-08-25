@@ -1,0 +1,9 @@
+{
+  "Item": "Spell_Fireball",
+  "Name": "Fireball",
+  "Description": "A powerful fireball spell that deals damage to enemies.",
+  "ManaCost": 10,
+  "Cooldown": 5,
+  "Interaction": "Interaction_Spell_Fireball",
+  "CastTime": 2
+}

@@ -17,16 +17,21 @@ public class GrimoirePlugin extends JavaPlugin {
 
     @Override
     protected void setup() {
+        // Register Grimoire command
         getCommandRegistry()
                 .registerCommand(new GrimoireCommand());
 
+        // Register Spell asset type
         getAssetRegistry().register(
                 HytaleAssetStore.builder(Spell.class, new DefaultAssetMap<>())
                         .setPath("Item/Spells")
+                        .loadsAfter(Item.class)
                         .setCodec(Spell.CODEC)
                         .setKeyFunction(Spell::getId)
-                        .loadsAfter(Item.class)
                         .build());
+
+        getCommandRegistry()
+                .registerCommand(new SpellCommand());
     }
 
     public static GrimoirePlugin get() {
