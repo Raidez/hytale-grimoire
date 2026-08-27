@@ -145,3 +145,22 @@ timeout. The `hytaleJvmDoctor` task can verify the JVM setup:
 It should report a JetBrains Runtime, Java 25, and enhanced class redefinition
 support.
 
+### Custom asset type - suite case
+
+|             | custom path | same path | sub path |
+| ----------- | ----------- | --------- | -------- |
+| not load    | 1.          | 2.        | 3.       |
+| load before | 4.          | 5.        | 6.       |
+| load after  | 7.          | 8.        | 9.       |
+
+1. Propriety `Parent` exists, it's accept `Spell` asset type, the file is created inside `Grimoire` folder
+2. Propriety `Parent` exists, it's accept `Item` asset type, the default asset type is overwritten, can't access other item asset type, the file is created inside `Item/Items` folder
+3. Propriety `Parent` exists, it's accept `Spell` asset type, two folder `Item` exist and glitch together, can't access other item asset type, the file is created inside `Item/Items/Spells` folder
+
+4. Exactly the same as 1
+5. Exactly the same as 2
+6. Same as 3, but I can access other item asset type, the file is created inside `Item/Items/Spells` folder, and don't have extra fields bring by the new asset type
+
+7. Exactly the same as 1
+8. Exactly the same as 2
+9. Exactly the same as 3

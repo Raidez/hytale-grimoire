@@ -10,7 +10,7 @@
     "PlayerAnimationsId": "Item",
     "Tags": {
         "Type": [
-            "Ingredient"
+            "Spell"
         ]
     },
     "ItemSoundSetId": "ISS_Blocks_Stone",
