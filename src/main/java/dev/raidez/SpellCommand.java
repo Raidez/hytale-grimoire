@@ -6,20 +6,17 @@ import java.util.stream.Collectors;
 import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.arguments.system.DefaultArg;
 import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
+import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.InteractionChain;
-import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -54,14 +51,14 @@ public class SpellCommand extends AbstractCommandCollection {
             // Get the spell from the command argument
             var spell = spellArg.get(commandContext);
             if (spell == null) {
-                commandContext.sendMessage(Message.raw("Invalid spell"));
+                commandContext.sendMessage(Message.raw("Invalid spell!"));
                 return;
             }
 
             // Get the item linked to the spell
             var item = spell.getItem();
             if (item == null) {
-                commandContext.sendMessage(Message.raw("Spell has no linked item"));
+                commandContext.sendMessage(Message.raw("Spell has no linked scroll!"));
                 return;
             }
 
@@ -89,14 +86,14 @@ public class SpellCommand extends AbstractCommandCollection {
             // Check if the player is holding an item
             var is = InventoryComponent.getItemInHand(store, ref);
             if (is == null) {
-                commandContext.sendMessage(Message.raw("You must hold an item."));
+                commandContext.sendMessage(Message.raw("You must hold a scroll!"));
                 return;
             }
 
             // Check if the item has spell tag and get the spell
             var spell = checkPrerequisites(is);
             if (spell == null) {
-                commandContext.sendMessage(Message.raw("This item has no spell linked to it."));
+                commandContext.sendMessage(Message.raw("This scroll has no spell linked to it!"));
                 return;
             }
 
@@ -122,10 +119,19 @@ public class SpellCommand extends AbstractCommandCollection {
 
     class CastCommand extends AbstractPlayerCommand {
 
+        private final DefaultArg<Which> whichArg;
         private final OptionalArg<Spell> spellArg;
 
+        enum Which {
+            HAND, // From the item in hand
+            ARGUMENT, // From the spell argument
+        }
+
         public CastCommand() {
-            super("cast", "Cast a spell from the spell list or from the item in hand");
+            super("cast", "Cast a spell from the scroll in hand or from the spell argument");
+            whichArg = withDefaultArg("which", "Which spell to cast",
+                    ArgTypes.forEnum("which", Which.class),
+                    Which.HAND, "hand");
             spellArg = withOptionalArg("spell", "Spell to cast", Spell.SPELL_ASSET);
         }
 
@@ -137,26 +143,41 @@ public class SpellCommand extends AbstractCommandCollection {
                 PlayerRef playerRef,
                 World world) {
 
-            // Get the spell from the command argument
-            var spell = spellArg.get(commandContext);
-            if (spell == null) {
+            var spellInteractionId = "";
+
+            var which = whichArg.get(commandContext);
+            if (Which.ARGUMENT.equals(which)) {
+
+                // Get the spell from the command argument
+                var spell = spellArg.get(commandContext);
+                if (spell == null) {
+                    commandContext.sendMessage(Message.raw("You must specify a spell to cast!"));
+                    return;
+                }
+
+                spellInteractionId = spell.getInteractionId();
+
+            } else if (Which.HAND.equals(which)) {
+
                 // Check if the player is holding an item
                 var is = InventoryComponent.getItemInHand(store, ref);
                 if (is == null) {
-                    commandContext.sendMessage(Message.raw("You must hold an item."));
+                    commandContext.sendMessage(Message.raw("You must hold a scroll!"));
                     return;
                 }
 
                 // Check if the item has spell tag and get the spell
-                spell = checkPrerequisites(is);
+                var spell = checkPrerequisites(is);
                 if (spell == null) {
-                    commandContext.sendMessage(Message.raw("This item has no spell linked to it."));
+                    commandContext.sendMessage(Message.raw("This scroll has no spell linked to it!"));
                     return;
                 }
+
+                spellInteractionId = spell.getInteractionId();
             }
 
             // Execute the interaction for the spell
-            executeInteraction(spell.getInteractionId(), store, ref);
+            Utils.executeInteraction(spellInteractionId, store, ref);
         }
 
     }
@@ -169,7 +190,7 @@ public class SpellCommand extends AbstractCommandCollection {
      */
     private Spell checkPrerequisites(ItemStack is) {
         // Check if the item has spell tag
-        var tagIndex = AssetRegistry.getOrCreateTagIndex("Spell");
+        var tagIndex = AssetRegistry.getOrCreateTagIndex("Scroll");
         var tags = is.getItem().getData().getTags();
         if (!tags.containsKey(tagIndex)) {
             return null;
@@ -178,34 +199,6 @@ public class SpellCommand extends AbstractCommandCollection {
         // Get the spell
         var spell = Spell.getFromItem(is.getItem());
         return spell;
-    }
-
-    /**
-     * Execute the interaction for the spell
-     * 
-     * @param interaction
-     * @param store
-     * @param ref
-     */
-    private void executeInteraction(
-            String interaction,
-            Store<EntityStore> store,
-            Ref<EntityStore> ref) {
-
-        var interactionManager = store.getComponent(ref, InteractionModule.get().getInteractionManagerComponent());
-        if (interactionManager == null) {
-            return;
-        }
-
-        var interactionType = InteractionType.Primary;
-        var context = InteractionContext.forInteraction(interactionManager, ref, interactionType, store);
-        var rootInteraction = RootInteraction.getRootInteractionOrUnknown(interaction);
-        if (rootInteraction == null) {
-            return;
-        }
-
-        InteractionChain chain = interactionManager.initChain(interactionType, context, rootInteraction, true);
-        interactionManager.queueExecuteChain(chain);
     }
 
 }

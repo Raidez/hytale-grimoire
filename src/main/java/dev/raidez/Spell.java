@@ -13,6 +13,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.command.system.arguments.types.AssetArgumentType;
 import com.hypixel.hytale.server.core.command.system.arguments.types.SingleArgumentType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 
 public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, Spell>> {
 
@@ -52,7 +53,7 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
             .append(new KeyedCodec<>("CastTime", Codec.FLOAT), Spell::setCastTime, Spell::getCastTime)
             .add()
             .append(new KeyedCodec<>("Interaction", Codec.STRING), Spell::setInteractionId, Spell::getInteractionId)
-            .addValidator(Interaction.VALIDATOR_CACHE.getValidator())
+            .addValidator(RootInteraction.VALIDATOR_CACHE.getValidator())
             .add()
             .append(new KeyedCodec<>("Texture", Codec.STRING), Spell::setTexture, Spell::getTexture)
             .addValidator(ICON_SPELL)

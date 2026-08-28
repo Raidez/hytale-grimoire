@@ -23,11 +23,6 @@
             0
         ]
     },
-    "Interactions": {
-        "Primary": "Grimoire_Cast_Spell",
-        "Secondary": "Grimoire_Change_Spell",
-        "Use": "Grimoire_Infuse_Spell"
-    },
     "DroppedItemAnimation": "Items/Animations/Dropped/Dropped_Diagonal_Left.blockyanim",
     "Scale": 1.2,
     "Tags": {

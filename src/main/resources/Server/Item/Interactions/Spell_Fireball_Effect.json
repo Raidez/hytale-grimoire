@@ -1,7 +1,0 @@
-{
-    "Type": "Projectile",
-    "Config": "ProjectileConfig_Spell_Fireball",
-    "Effects": {
-        "ItemAnimationId": "CastHurlCharged"
-    }
-}
