@@ -55,7 +55,7 @@
                     }
                 ]
             },
-            "Failed": "Interaction_Spell_Failed"
+            "Failed": "Spell_Failed"
         }
     }
 }

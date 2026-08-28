@@ -11,8 +11,6 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
-import com.hypixel.hytale.server.core.command.system.arguments.types.AssetArgumentType;
-import com.hypixel.hytale.server.core.command.system.arguments.types.SingleArgumentType;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
@@ -28,8 +26,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class SpellCommand extends AbstractCommandCollection {
 
-    public static final SingleArgumentType<Spell> SPELL_ASSET = new AssetArgumentType<>("", Spell.class, "");
-
     public SpellCommand() {
         super("spell", "Spell command");
         addAliases("sp");
@@ -44,7 +40,7 @@ public class SpellCommand extends AbstractCommandCollection {
 
         public GiveCommand() {
             super("give", "Give a spell to a player from the spell list");
-            spellArg = withRequiredArg("spell", "Spell to give", SPELL_ASSET);
+            spellArg = withRequiredArg("spell", "Spell to give", Spell.SPELL_ASSET);
         }
 
         @Override
@@ -130,7 +126,7 @@ public class SpellCommand extends AbstractCommandCollection {
 
         public CastCommand() {
             super("cast", "Cast a spell from the spell list or from the item in hand");
-            spellArg = withOptionalArg("spell", "Spell to cast", SPELL_ASSET);
+            spellArg = withOptionalArg("spell", "Spell to cast", Spell.SPELL_ASSET);
         }
 
         @Override

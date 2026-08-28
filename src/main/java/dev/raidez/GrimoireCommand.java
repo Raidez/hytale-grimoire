@@ -4,7 +4,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.DefaultArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
@@ -136,16 +135,16 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
             // Get the grimoire metadata and the current spell
             var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
-            var spell = grimoire.getCurrentSpell();
-            if (spell == null) {
+            var spellId = grimoire.getCurrentSpell();
+            if (spellId == null) {
                 commandContext.sendMessage(Message.raw("The grimoire has no spells."));
                 return;
             }
 
             // Cast the spell (for now, just send a message)
-            var interaction = "Cast_Spell_Fireball";
-            executeInteraction(interaction, store, ref);
-            commandContext.sendMessage(Message.raw("Casting spell: " + spell));
+            var spell = Spell.getAssetMap().getAsset(spellId);
+            executeInteraction(spell.getInteractionId(), store, ref);
+            commandContext.sendMessage(Message.raw("Casting spell: " + spell.getName()));
         }
     }
 
@@ -153,7 +152,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
         private final DefaultArg<Operation> operationArg;
 
-        private final DefaultArg<Item> spellArg;
+        private final DefaultArg<Spell> spellArg;
 
         enum Operation {
             Add, // Infuse a spell into the grimoire in the player's hand
@@ -165,7 +164,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
             super("infuse", "Infuse a spell into the grimoire in the player's hand");
             operationArg = withDefaultArg("operation", "Operation to perform",
                     ArgTypes.forEnum("operation", Operation.class), Operation.Add, "add");
-            spellArg = withDefaultArg("spell", "Spell to infuse", ArgTypes.ITEM_ASSET, null, "");
+            spellArg = withDefaultArg("spell", "Spell to infuse", Spell.SPELL_ASSET, null, "");
         }
 
         @Override
@@ -177,7 +176,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
                 World world) {
 
             var operation = commandContext.get(operationArg);
-            var spell = commandContext.get(spellArg);
+            var spell2 = commandContext.get(spellArg);
             var inventory = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
 
             // Check if the player is holding a grimoire
@@ -190,8 +189,8 @@ public class GrimoireCommand extends AbstractCommandCollection {
             // Get the grimoire metadata and perform the operation
             var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
             switch (operation) {
-                case Add -> grimoire.addSpell(spell.getId());
-                case Remove -> grimoire.removeSpell(spell.getId());
+                case Add -> grimoire.addSpell(spell2.getId());
+                case Remove -> grimoire.removeSpell(spell2.getId());
                 case Purge -> grimoire.clearSpells();
             }
 

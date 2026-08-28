@@ -10,9 +10,13 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.server.core.asset.common.CommonAssetValidator;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.command.system.arguments.types.AssetArgumentType;
+import com.hypixel.hytale.server.core.command.system.arguments.types.SingleArgumentType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 
 public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, Spell>> {
+
+    public static final SingleArgumentType<Spell> SPELL_ASSET = new AssetArgumentType<>("", Spell.class, "");
 
     private static AssetStore<String, Spell, DefaultAssetMap<String, Spell>> ASSET_STORE;
 

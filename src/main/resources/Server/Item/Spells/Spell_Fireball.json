@@ -1,9 +1,9 @@
 {
-  "Item": "Spell_Fireball",
+  "Item": "Scroll_Fireball",
   "Name": "Fireball",
   "Description": "A powerful fireball spell that deals damage to enemies.",
   "ManaCost": 10,
   "Cooldown": 5,
-  "Interaction": "Interaction_Spell_Fireball",
+  "Interaction": "Spell_Fireball_Effect",
   "CastTime": 2
 }

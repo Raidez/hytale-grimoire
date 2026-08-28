@@ -1,7 +1,7 @@
 {
     "TranslationProperties": {
-        "Name": "server.items.spell_firebomb.name",
-        "Description": "server.items.spell_firebomb.desc"
+        "Name": "server.items.scroll_fireball.name",
+        "Description": "server.items.scroll_fireball.desc"
     },
     "Icon": "Icons/ItemsGenerated/Recipe_Page.png",
     "Categories": [
@@ -10,7 +10,7 @@
     "PlayerAnimationsId": "Item",
     "Tags": {
         "Type": [
-            "Spell"
+            "Scroll"
         ]
     },
     "ItemSoundSetId": "ISS_Blocks_Stone",

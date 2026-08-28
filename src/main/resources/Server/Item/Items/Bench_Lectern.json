@@ -1,137 +1,137 @@
 {
-  "TranslationProperties": {
-    "Name": "server.items.bench_lectern.name",
-    "Description": "server.items.bench_lectern.desc"
-  },
-  "Recipe": {
-    "Input": [
-      {
-        "Quantity": 4,
-        "ResourceTypeId": "Wood_Trunk"
-      },
-      {
-        "Quantity": 3,
-        "ResourceTypeId": "Rock"
-      },
-      {
-        "ItemId": "Ingredient_Hide_Light",
-        "Quantity": 1
-      },
-      {
-        "ItemId": "Ingredient_Feathers_Light",
-        "Quantity": 1
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Type": "Crafting",
-        "Categories": [
-          "Workbench_Crafting"
+    "TranslationProperties": {
+        "Name": "server.items.bench_lectern.name",
+        "Description": "server.items.bench_lectern.desc"
+    },
+    "Recipe": {
+        "Input": [
+            {
+                "Quantity": 4,
+                "ResourceTypeId": "Wood_Trunk"
+            },
+            {
+                "Quantity": 3,
+                "ResourceTypeId": "Rock"
+            },
+            {
+                "ItemId": "Ingredient_Hide_Light",
+                "Quantity": 1
+            },
+            {
+                "ItemId": "Ingredient_Feathers_Light",
+                "Quantity": 1
+            }
         ],
-        "Id": "Workbench"
-      }
-    ]
-  },
-  "Icon": "Icons/ItemsGenerated/Bench_WorkBench.png",
-  "Categories": [
-    "Furniture.Benches"
-  ],
-  "BlockType": {
-    "Material": "Solid",
-    "DrawType": "Model",
-    "Opacity": "Transparent",
-    "CustomModel": "Blocks/Benches/Workbench.blockymodel",
-    "CustomModelTexture": [
-      {
-        "Texture": "Blocks/Benches/Workbench_Texture.png",
-        "Weight": 1
-      }
+        "BenchRequirement": [
+            {
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Crafting"
+                ],
+                "Id": "Workbench"
+            }
+        ]
+    },
+    "Icon": "Icons/ItemsGenerated/Bench_WorkBench.png",
+    "Categories": [
+        "Furniture.Benches"
     ],
-    "HitboxType": "Bench_Workbench",
-    "VariantRotation": "NESW",
-    "Bench": {
-      "Type": "Crafting",
-      "Categories": [
-        {
-          "Id": "LecternBench_Spells",
-          "Icon": "Icons/CraftingCategories/Workbench/Tools.png",
-          "Name": "server.benchCategories.spells"
+    "BlockType": {
+        "Material": "Solid",
+        "DrawType": "Model",
+        "Opacity": "Transparent",
+        "CustomModel": "Blocks/Benches/Workbench.blockymodel",
+        "CustomModelTexture": [
+            {
+                "Texture": "Blocks/Benches/Workbench_Texture.png",
+                "Weight": 1
+            }
+        ],
+        "HitboxType": "Bench_Workbench",
+        "VariantRotation": "NESW",
+        "Bench": {
+            "Type": "Crafting",
+            "Categories": [
+                {
+                    "Id": "LecternBench_Spells",
+                    "Icon": "Icons/CraftingCategories/Workbench/Tools.png",
+                    "Name": "server.benchCategories.spells"
+                },
+                {
+                    "Id": "LecternBench_Misc",
+                    "Icon": "Icons/CraftingCategories/Furniture/Misc.png",
+                    "Name": "server.benchCategories.misc"
+                },
+                {
+                    "Id": "LecternBench_Colors",
+                    "Icon": "Icons/CraftingCategories/Workbench/Deco_Target.png",
+                    "Name": "server.benchCategories.colors"
+                }
+            ],
+            "LocalOpenSoundEventId": "SFX_Workbench_Open",
+            "LocalCloseSoundEventId": "SFX_Workbench_Close",
+            "CompletedSoundEventId": "SFX_Workbench_Craft",
+            "FailedSoundEventId": "SFX_Generic_Crafting_Failed",
+            "BenchUpgradeSoundEventId": "SFX_Workbench_Upgrade_Start_Default",
+            "BenchUpgradeCompletedSoundEventId": "SFX_Workbench_Upgrade_Complete_Default",
+            "Id": "LecternBench"
         },
-        {
-          "Id": "LecternBench_Misc",
-          "Icon": "Icons/CraftingCategories/Furniture/Misc.png",
-          "Name": "server.benchCategories.misc"
+        "BlockEntity": {
+            "Components": {
+                "BenchBlock": {}
+            }
         },
-        {
-          "Id": "LecternBench_Colors",
-          "Icon": "Icons/CraftingCategories/Workbench/Deco_Target.png",
-          "Name": "server.benchCategories.colors"
+        "Gathering": {
+            "Breaking": {
+                "GatherType": "Benches"
+            }
+        },
+        "BlockParticleSetId": "Wood",
+        "ParticleColor": "#6e4a2f",
+        "Support": {
+            "Down": [
+                {
+                    "FaceType": "Full"
+                }
+            ]
+        },
+        "BlockSoundSetId": "Wood",
+        "PhysicalMaterialId": "Wood",
+        "TextureComputedColor": "#6C4C30",
+        "Supporting": {
+            "Up": [
+                {
+                    "FaceType": "Grimoire"
+                }
+            ]
+        },
+        "State": {
+            "Definitions": {
+                "GrimoireMode": {
+                    "CustomModel": "Items/Instruments/Banjo/Banjo.blockymodel"
+                }
+            }
         }
-      ],
-      "LocalOpenSoundEventId": "SFX_Workbench_Open",
-      "LocalCloseSoundEventId": "SFX_Workbench_Close",
-      "CompletedSoundEventId": "SFX_Workbench_Craft",
-      "FailedSoundEventId": "SFX_Generic_Crafting_Failed",
-      "BenchUpgradeSoundEventId": "SFX_Workbench_Upgrade_Start_Default",
-      "BenchUpgradeCompletedSoundEventId": "SFX_Workbench_Upgrade_Complete_Default",
-      "Id": "LecternBench"
     },
-    "BlockEntity": {
-      "Components": {
-        "BenchBlock": {}
-      }
+    "PlayerAnimationsId": "Block",
+    "IconProperties": {
+        "Scale": 0.42,
+        "Rotation": [
+            22.5,
+            45.0,
+            22.5
+        ],
+        "Translation": [
+            12.9,
+            -11.7
+        ]
     },
-    "Gathering": {
-      "Breaking": {
-        "GatherType": "Benches"
-      }
+    "Tags": {
+        "Type": [
+            "Bench"
+        ]
     },
-    "BlockParticleSetId": "Wood",
-    "ParticleColor": "#6e4a2f",
-    "Support": {
-      "Down": [
-        {
-          "FaceType": "Full"
-        }
-      ]
-    },
-    "BlockSoundSetId": "Wood",
-    "PhysicalMaterialId": "Wood",
-    "TextureComputedColor": "#6C4C30",
-    "Supporting": {
-      "Up": [
-        {
-          "FaceType": "Grimoire"
-        }
-      ]
-    },
-    "State": {
-      "Definitions": {
-        "GrimoireMode": {
-          "CustomModel": "Items/Instruments/Banjo/Banjo.blockymodel"
-        }
-      }
-    }
-  },
-  "PlayerAnimationsId": "Block",
-  "IconProperties": {
-    "Scale": 0.42,
-    "Rotation": [
-      22.5,
-      45.0,
-      22.5
-    ],
-    "Translation": [
-      12.9,
-      -11.7
-    ]
-  },
-  "Tags": {
-    "Type": [
-      "Bench"
-    ]
-  },
-  "MaxStack": 1,
-  "ItemLevel": 1,
-  "ItemSoundSetId": "ISS_Blocks_Wood"
+    "MaxStack": 1,
+    "ItemLevel": 1,
+    "ItemSoundSetId": "ISS_Blocks_Wood"
 }

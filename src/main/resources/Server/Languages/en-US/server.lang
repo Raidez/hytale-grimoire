@@ -14,10 +14,5 @@ items.ingredient_blank_scroll.desc = A blank scroll used for writing spells.
 items.weapon_grimoire.name = Grimoire
 items.weapon_grimoire.desc = A magical book that allows you to store and cast spells.
 
-items.spell_fireball.name = Fireball Spell
-items.spell_fireball.shortName = Fireball
-items.spell_fireball.desc = A powerful fireball spell that deals damage to enemies.
-
-items.spell_firebomb.name = Firebomb Spell
-items.spell_firebomb.shortName = Firebomb
-items.spell_firebomb.desc = A fiery bomb that explodes on impact, dealing area damage.
+items.scroll_fireball.name = Fireball Spell
+items.scroll_fireball.desc = A powerful fireball spell that deals damage to enemies.
