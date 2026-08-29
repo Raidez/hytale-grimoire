@@ -1,6 +1,7 @@
-package dev.raidez;
+package dev.raidez.resources;
 
 import com.hypixel.hytale.assetstore.AssetExtraInfo;
+import com.hypixel.hytale.assetstore.AssetKeyValidator;
 import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.assetstore.codec.AssetBuilderCodec;
@@ -8,6 +9,7 @@ import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.validation.ValidatorCache;
 import com.hypixel.hytale.server.core.asset.common.CommonAssetValidator;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.command.system.arguments.types.AssetArgumentType;
@@ -22,6 +24,9 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     private static AssetStore<String, Spell, DefaultAssetMap<String, Spell>> ASSET_STORE;
 
     public static final CommonAssetValidator ICON_SPELL = new CommonAssetValidator("png", "Icons/Spells");
+
+    public static final ValidatorCache<String> VALIDATOR_CACHE = new ValidatorCache<>(
+            new AssetKeyValidator<>(Spell::getAssetStore));
 
     private String id;
     private AssetExtraInfo.Data data;
@@ -95,6 +100,7 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     }
 
     // #region Getters and Setters
+
     public String getItemId() {
         return itemId;
     }
@@ -158,6 +164,7 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     public void setTexture(String texture) {
         this.texture = texture;
     }
+
     // #endregion
 
 }

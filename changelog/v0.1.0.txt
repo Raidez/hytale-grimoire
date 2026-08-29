@@ -1,0 +1,32 @@
+Hi everyone 😘
+I will show you my current works.
+Hope, that didn't crash when I'm presenting 🫠
+
+Let me introduce you to *Grimoire*, my magic implementation.
+
+With a lectern, you can craft your customized colored grimoire
+where you will put spell crafted from various ingredient.
+
+You can change selected spell and cast which you want (up to 12).
+
+It's WIP, so the mod only works with commands.
+But everything is well handled (I think).
+
+----
+
+/grimoire give -> give a magic grimoire with default spell
+/grimoire slot ... -> change selected spell slot
+/grimoire cast -> cast the current selected spell slot
+/grimoire infuse ... -> update spells (add, remove, purge)
+/grimoire check -> show current spells in grimoire
+
+/spell give ... -> give the scroll linked to the spell (Hytale asset logic)
+/spell check -> show linked spell of the held scroll
+/spell cast ... -> cast spell from scroll or argument
+
+----
+
+For now the only spell I made is fireball.
+It's throw a fire projectile that burn mob or nature!
+
+I'm a little proud, because it's not a default behavior of fire projectile in Hytale 🔥🔥🔥

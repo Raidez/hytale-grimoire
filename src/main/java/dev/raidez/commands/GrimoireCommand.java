@@ -1,4 +1,4 @@
-package dev.raidez;
+package dev.raidez.commands;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -14,6 +14,10 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+
+import dev.raidez.Utils;
+import dev.raidez.resources.GrimoireMetadata;
+import dev.raidez.resources.Spell;
 
 public class GrimoireCommand extends AbstractCommandCollection {
 
@@ -88,7 +92,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
             // Check if the player is holding a grimoire
             var inventory = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
             var is = inventory.getActiveItem();
-            if (is == null || !is.getItemId().equals("Weapon_Grimoire")) {
+            if (!Utils.isGrimoire(is)) {
                 commandContext.sendMessage(Message.raw("You must hold a grimoire to change the slot!"));
                 return;
             }
@@ -123,7 +127,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
             // Check if the player is holding a grimoire
             var is = InventoryComponent.getItemInHand(store, ref);
-            if (is == null || !is.getItemId().equals("Weapon_Grimoire")) {
+            if (!Utils.isGrimoire(is)) {
                 commandContext.sendMessage(Message.raw("You must hold a grimoire to cast a spell!"));
                 return;
             }
@@ -136,7 +140,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
                 return;
             }
 
-            // Cast the spell (for now, just send a message)
+            // Cast the spell
             var spell = Spell.getAssetMap().getAsset(spellId);
             Utils.executeInteraction(spell.getInteractionId(), store, ref);
             commandContext.sendMessage(Message.raw("Casting spell: " + spell.getName()));
@@ -176,7 +180,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
             // Check if the player is holding a grimoire
             var is = InventoryComponent.getItemInHand(store, ref);
-            if (is == null || !is.getItemId().equals("Weapon_Grimoire")) {
+            if (!Utils.isGrimoire(is)) {
                 commandContext.sendMessage(Message.raw("You must hold a grimoire to cast a spell!"));
                 return;
             }
@@ -215,7 +219,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
             // Check if the player is holding a grimoire
             var is = InventoryComponent.getItemInHand(store, ref);
-            if (is == null || !is.getItemId().equals("Weapon_Grimoire")) {
+            if (!Utils.isGrimoire(is)) {
                 commandContext.sendMessage(Message.raw("You must hold a grimoire to check its spells!"));
                 return;
             }

@@ -1,4 +1,4 @@
-package dev.raidez;
+package dev.raidez.resources;
 
 import java.util.ArrayList;
 import java.util.Arrays;

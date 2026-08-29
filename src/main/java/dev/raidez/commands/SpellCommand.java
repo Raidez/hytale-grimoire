@@ -1,4 +1,4 @@
-package dev.raidez;
+package dev.raidez.commands;
 
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
@@ -20,6 +20,9 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+
+import dev.raidez.Utils;
+import dev.raidez.resources.Spell;
 
 public class SpellCommand extends AbstractCommandCollection {
 

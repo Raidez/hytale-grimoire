@@ -1,0 +1,17 @@
+{
+  "Icon": "Icons/ItemsGenerated/Recipe_Page.png",
+  "Categories": [
+    "Items.Ingredients"
+  ],
+  "PlayerAnimationsId": "Item",
+  "Tags": {
+    "Type": [
+      "Scroll"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "MaxStack": 1,
+  "Model": "Items/Consumables/Recipes/Recipe.blockymodel",
+  "Texture": "Items/Consumables/Recipes/Recipe_Texture.png",
+  "Quality": "Template"
+}
