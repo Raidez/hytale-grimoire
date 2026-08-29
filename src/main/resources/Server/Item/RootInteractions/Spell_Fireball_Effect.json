@@ -1,20 +1,18 @@
 {
-    "Interactions": [
-        {
-            "Type": "Projectile",
-            "Config": "ProjectileConfig_Spell_Fireball",
-            "Effects": {
-                "ItemAnimationId": "CastHurlCharged"
-            },
-            "Next": {
-                "1": {
-                    "Type": "Simple",
-                    "RunTime": 0.5,
-                    "Effects": {
-                        "WorldSoundEventId": "SFX_Staff_Flame_Fireball_Impact"
-                    }
-                }
-            }
+  "Interactions": [
+    {
+      "Type": "Projectile",
+      "Config": "ProjectileConfig_Spell_Fireball",
+      "Effects": {
+        "ItemAnimationId": "CastHurlCharged"
+      },
+      "Next": {
+        "Type": "Simple",
+        "RunTime": 0.5,
+        "Effects": {
+          "WorldSoundEventId": "SFX_Staff_Flame_Fireball_Impact"
         }
-    ]
+      }
+    }
+  ]
 }

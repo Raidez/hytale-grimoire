@@ -25,8 +25,11 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
 
     public static final CommonAssetValidator ICON_SPELL = new CommonAssetValidator("png", "Icons/Spells");
 
-    public static final ValidatorCache<String> VALIDATOR_CACHE = new ValidatorCache<>(
-            new AssetKeyValidator<>(Spell::getAssetStore));
+    public static final ValidatorCache<String> VALIDATOR_CACHE;
+
+    static {
+        VALIDATOR_CACHE = new ValidatorCache<>(new AssetKeyValidator<>(Spell::getAssetStore));
+    }
 
     private String id;
     private AssetExtraInfo.Data data;

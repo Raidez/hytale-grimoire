@@ -1,7 +1,8 @@
 {
   "Interactions": [
     {
-      "Type": "GrimoireCast"
+      "Type": "Cast",
+      "Spell": "Spell_Fireball"
     }
   ]
 }
