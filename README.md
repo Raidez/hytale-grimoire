@@ -170,8 +170,10 @@ support.
 
 ### TODO
 
+- [ ] Put metadata in grimoire when crafting it (PlayerCraftEvent deprecated, try CraftRecipeEvent instead)
 - [ ] Add more fields in spell asset type (author, recipe, quality, etc.)
 - [ ] Add item generator based on spell asset type
+- [ ] Update spell give command to generate scroll item based on spell asset type
 - [ ] Make custom UI to select spells in grimoire
 - [ ] Make custom UI to infuse spells in lectern
 - [ ] Make model for lectern
@@ -184,3 +186,8 @@ support.
 
 ### DONE
 
+### TWEAKS
+
+- [ ] Check spell recipe order in lectern (level 1 first, categories ?)
+- [ ] Add grimoire variants (colors)
+- [ ] Show spell rune on grimoire when selected (effects)

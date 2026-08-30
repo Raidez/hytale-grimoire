@@ -20,47 +20,47 @@ public class Utils {
      * Create a new interaction context and execute the given interaction.
      * Used by commands context.
      * 
-     * @param interaction
+     * @param interactionId
      * @param store
      * @param ref
      */
     public static void executeInteraction(
-            String interaction,
+            String interactionId,
             Store<EntityStore> store,
             Ref<EntityStore> ref) {
 
-        var interactionManager = store.getComponent(ref, InteractionModule.get().getInteractionManagerComponent());
-        if (interactionManager == null) {
+        var manager = store.getComponent(ref, InteractionModule.get().getInteractionManagerComponent());
+        if (manager == null) {
             return;
         }
 
-        var interactionType = InteractionType.Primary;
-        var context = InteractionContext.forInteraction(interactionManager, ref, interactionType, store);
-        var rootInteraction = RootInteraction.getAssetMap().getAsset(interaction);
-        if (rootInteraction == null) {
+        var type = InteractionType.Primary;
+        var context = InteractionContext.forInteraction(manager, ref, type, store);
+        var interaction = RootInteraction.getAssetMap().getAsset(interactionId);
+        if (interaction == null) {
             return;
         }
 
-        InteractionChain chain = interactionManager.initChain(interactionType, context, rootInteraction, true);
-        interactionManager.queueExecuteChain(chain);
+        InteractionChain chain = manager.initChain(type, context, interaction, true);
+        manager.queueExecuteChain(chain);
     }
 
     /**
      * Execute an interaction in the given interaction context.
      * Used by interactions context.
      * 
-     * @param interaction
+     * @param interactionId
      * @param context
      */
     public static void executeInteraction(
-            String interaction,
+            String interactionId,
             InteractionContext context) {
 
-        var rootInteraction = RootInteraction.getAssetMap().getAsset(interaction);
-        if (rootInteraction == null) {
+        var interaction = RootInteraction.getAssetMap().getAsset(interactionId);
+        if (interaction == null) {
             return;
         }
-        context.execute(rootInteraction);
+        context.execute(interaction);
     }
 
 }
