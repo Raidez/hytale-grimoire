@@ -18,12 +18,12 @@ public class Utils {
 
     /**
      * Create a new interaction context and execute the given interaction.
+     * Used by commands context.
      * 
      * @param interaction
      * @param store
      * @param ref
      */
-    @SuppressWarnings("deprecation")
     public static void executeInteraction(
             String interaction,
             Store<EntityStore> store,
@@ -36,7 +36,7 @@ public class Utils {
 
         var interactionType = InteractionType.Primary;
         var context = InteractionContext.forInteraction(interactionManager, ref, interactionType, store);
-        var rootInteraction = RootInteraction.getRootInteractionOrUnknown(interaction);
+        var rootInteraction = RootInteraction.getAssetMap().getAsset(interaction);
         if (rootInteraction == null) {
             return;
         }
@@ -47,16 +47,16 @@ public class Utils {
 
     /**
      * Execute an interaction in the given interaction context.
+     * Used by interactions context.
      * 
      * @param interaction
      * @param context
      */
-    @SuppressWarnings("deprecation")
     public static void executeInteraction(
             String interaction,
             InteractionContext context) {
 
-        var rootInteraction = RootInteraction.getRootInteractionOrUnknown(interaction);
+        var rootInteraction = RootInteraction.getAssetMap().getAsset(interaction);
         if (rootInteraction == null) {
             return;
         }

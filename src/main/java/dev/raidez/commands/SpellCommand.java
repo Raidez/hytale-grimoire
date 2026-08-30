@@ -68,6 +68,7 @@ public class SpellCommand extends AbstractCommandCollection {
             // Give the item to the player
             var is = new ItemStack(item.getId());
             Player.giveItem(is, ref, store);
+            commandContext.sendMessage(Message.raw("You have been given the spell: " + spell.getName()));
         }
 
     }
@@ -181,6 +182,7 @@ public class SpellCommand extends AbstractCommandCollection {
 
             // Execute the interaction for the spell
             Utils.executeInteraction(spellInteractionId, store, ref);
+            commandContext.sendMessage(Message.raw("You have cast the spell!"));
         }
 
     }

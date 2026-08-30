@@ -164,3 +164,23 @@ support.
 7. Exactly the same as 1
 8. Exactly the same as 2
 9. Exactly the same as 3
+
+
+## Kanban
+
+### TODO
+
+- [ ] Add more fields in spell asset type (author, recipe, quality, etc.)
+- [ ] Add item generator based on spell asset type
+- [ ] Make custom UI to select spells in grimoire
+- [ ] Make custom UI to infuse spells in lectern
+- [ ] Make model for lectern
+- [ ] Make alt model lectern with book on top
+- [ ] Add lectern state to switch between infuse mode or craft mode
+
+### WIP
+
+- [ ] Make root interaction with custom data (cast time, mana cost, cooldown, etc.)
+
+### DONE
+
