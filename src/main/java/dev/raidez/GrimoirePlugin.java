@@ -1,5 +1,7 @@
 package dev.raidez;
 
+import com.hypixel.hytale.assetstore.event.LoadedAssetsEvent;
+import com.hypixel.hytale.assetstore.event.RemovedAssetsEvent;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -10,6 +12,7 @@ import com.hypixel.hytale.server.core.util.Config;
 
 import dev.raidez.commands.GrimoireCommand;
 import dev.raidez.commands.SpellCommand;
+import dev.raidez.handlers.GenerateSpellChainHandler;
 import dev.raidez.interactions.CastInteraction;
 import dev.raidez.interactions.GrimoireCastInteraction;
 import dev.raidez.interactions.GrimoireSlotInteraction;
@@ -41,6 +44,10 @@ public class GrimoirePlugin extends JavaPlugin {
                         .setCodec(Spell.CODEC)
                         .setKeyFunction(Spell::getId)
                         .build());
+
+        // Register handlers
+        getEventRegistry().register(LoadedAssetsEvent.class, Spell.class, GenerateSpellChainHandler::onSpellLoad);
+        getEventRegistry().register(RemovedAssetsEvent.class, Spell.class, GenerateSpellChainHandler::onSpellRemove);
 
         // Register commands
         if (!isDisableCommands) {

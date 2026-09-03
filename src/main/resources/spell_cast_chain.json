@@ -1,0 +1,43 @@
+{
+    "Interactions": [
+        {
+            "Type": "Charging",
+            "Effects": {
+                "WorldSoundEventId": "SFX_Skeleton_Mage_Spellbook_Charge",
+                "ItemAnimationId": "CastHurlCharging",
+                "ClearAnimationOnFinish": true,
+                "ClearSoundEventOnFinish": true
+            },
+            "AllowIndefiniteHold": true,
+            "Next": {
+                "%s": {
+                    "Type": "StatsCondition",
+                    "Costs": {
+                        "Mana": %s
+                    },
+                    "Next": {
+                        "Type": "Parallel",
+                        "Interactions": [
+                            {
+                                "Interactions": [
+                                    {
+                                        "Type": "ChangeStat",
+                                        "StatModifiers": {
+                                            "Mana": %s
+                                        }
+                                    }
+                                ]
+                            },
+                            "%s"
+                        ]
+                    },
+                    "Failed": "Spell_Failed"
+                }
+            }
+        }
+    ],
+    "Cooldown": {
+        "Id": "%s",
+        "Cooldown": %s
+    }
+}
