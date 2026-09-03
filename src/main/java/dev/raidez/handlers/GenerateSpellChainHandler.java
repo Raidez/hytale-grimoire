@@ -19,7 +19,7 @@ import dev.raidez.resources.Spell;
 
 public class GenerateSpellChainHandler {
 
-    private static final String CAST_CHAIN_TEMPLATE = readResource("spell_cast_chain.json");
+    private static final String CAST_CHAIN_TEMPLATE = readResource("/spell_cast_chain.json");
 
     private static final HytaleLogger LOGGER = GrimoirePlugin.get().getLogger();
 
@@ -34,8 +34,8 @@ public class GenerateSpellChainHandler {
     }
 
     /**
-     * Handles the event when spells are loaded and generates their corresponding
-     * cast chains.
+     * Handles the event when spells assets are loaded and generates their cast
+     * interactions.
      * 
      * @param event
      */
@@ -45,41 +45,45 @@ public class GenerateSpellChainHandler {
         var chains = new ArrayList<RootInteraction>(event.getLoadedAssets().size());
 
         for (var spell : event.getLoadedAssets().values()) {
-            var chainId = Spell.getCastChainId(spell.getId());
-            var document = buildCastChainDocument(spell);
-            LOGGER.atInfo().log("GenerateSpellChainHandler: Building cast chain '%s' for spell '%s': %s", chainId,
-                    spell.getId(),
-                    document.toJson());
-            chains.add(store.decode(DefaultAssetMap.DEFAULT_PACK_KEY, chainId, document.toBsonDocument()));
+            var interactionId = Spell.getCastInteractionId(spell.getId());
+            LOGGER.atInfo().log("GenerateSpellChainHandler: Building cast interaction '%s'", interactionId);
+
+            // Decode document into a RootInteraction instance
+            var document = buildCastInteractionDocument(spell).toBsonDocument();
+            var interaction = store.decode(DefaultAssetMap.DEFAULT_PACK_KEY, interactionId, document);
+
+            // Add interaction to the chains
+            chains.add(interaction);
         }
 
+        // Load all generated cast interactions into the asset store
         if (!chains.isEmpty()) {
             var result = store.loadAssets(DefaultAssetMap.DEFAULT_PACK_KEY, chains);
-            LOGGER.atInfo().log("GenerateSpellChainHandler: Loaded %d cast chain(s), %d failed: %s",
+            LOGGER.atInfo().log("GenerateSpellChainHandler: Loaded %d cast interaction(s), %d failed: %s",
                     result.getLoadedAssets().size(), result.getFailedToLoadKeys().size(),
                     result.getFailedToLoadKeys());
         }
     }
 
     /**
-     * Handles the event when spells are removed and removes their corresponding
-     * cast chains.
+     * Handles the event when spells assets are removed and removes their
+     * corresponding cast interactions.
      * 
      * @param event
      */
     public static void onSpellRemove(RemovedAssetsEvent<String, Spell, DefaultAssetMap<String, Spell>> event) {
-        var chainIds = event.getRemovedAssets().stream().map(Spell::getCastChainId).toList();
+        var chainIds = event.getRemovedAssets().stream().map(Spell::getCastInteractionId).toList();
         var removed = RootInteraction.getAssetStore().removeAssets(chainIds);
-        LOGGER.atInfo().log("GenerateSpellChainHandler: Removed %d/%d cast chain(s) for removed spell(s): %s",
+        LOGGER.atInfo().log("GenerateSpellChainHandler: Removed %d/%d cast interaction(s) for removed spell(s): %s",
                 removed.size(), chainIds.size(), chainIds);
     }
 
     /**
-     * Builds the RootInteraction document for a spell's cast chain:
-     * charge for CastTime seconds -> check ManaCost -> deduct mana and cast in
-     * parallel, or run Spell_Failed.
+     * Builds RootInteraction document for a spell's cast interaction.
+     * 
+     * @param spell
      */
-    private static Document buildCastChainDocument(Spell spell) {
+    private static Document buildCastInteractionDocument(Spell spell) {
         var json = CAST_CHAIN_TEMPLATE.formatted(
                 spell.getCastTime(),
                 spell.getManaCost(),

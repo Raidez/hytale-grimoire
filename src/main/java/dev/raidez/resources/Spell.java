@@ -89,9 +89,14 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
         return null;
     }
 
-    // This ID is used to identify the cast chain interaction for this spell
-    public static String getCastChainId(String spellId) {
-        return spellId + "_CastChain";
+    /**
+     * Returns the ID of the cast interaction for the given spell ID.
+     * 
+     * @param spellId
+     * @return
+     */
+    public static String getCastInteractionId(String spellId) {
+        return spellId + "_Cast";
     }
 
     @Override

@@ -3,7 +3,7 @@
   "Name": "Fireball",
   "Description": "A powerful fireball spell that deals damage to enemies.",
   "ManaCost": 10,
-  "Cooldown": 5,
+  "Cooldown": 3,
   "CastTime": 2,
   "Interaction": "Spell_Fireball_Effect"
 }

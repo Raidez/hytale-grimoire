@@ -26,6 +26,9 @@ public class GrimoireCastInteraction extends SimpleInstantInteraction {
             InteractionContext context,
             CooldownHandler cooldownHandler) {
 
+        var ref = context.getEntity();
+        var store = ref.getStore();
+
         // Check if the player is holding a grimoire
         var is = context.getHeldItem();
         if (!Utils.isGrimoire(is)) {
@@ -48,8 +51,8 @@ public class GrimoireCastInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        // Execute cast chain generated for this spell
-        Utils.executeInteraction(Spell.getCastChainId(spell.getId()), context);
+        // Execute the cast interaction for the current spell
+        Utils.executeInteraction(Spell.getCastInteractionId(spell.getId()), store, ref);
         LOGGER.atInfo().log("GrimoireCastInteraction: Casting spell: %s", spellId);
     }
 

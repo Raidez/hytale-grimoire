@@ -19,6 +19,8 @@ public class Utils {
     /**
      * Create a new interaction context and execute the given interaction.
      * Used by commands context.
+     * Starts a brand new chain via initChain, so the target RootInteraction's own
+     * cooldown is checked/applied.
      * 
      * @param interactionId
      * @param store
@@ -48,6 +50,8 @@ public class Utils {
     /**
      * Execute an interaction in the given interaction context.
      * Used by interactions context.
+     * Pushes onto the current chain (continuation), so the target RootInteraction's
+     * cooldown is NOT checked/applied.
      * 
      * @param interactionId
      * @param context
