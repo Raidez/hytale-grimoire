@@ -182,12 +182,12 @@ support.
 
 ### WIP
 
-- [ ] Put metadata in grimoire when crafting it (PlayerCraftEvent deprecated, try CraftRecipeEvent instead)
 - [ ] Make custom UI to infuse spells in lectern
 
 ### DONE
 
 - [x] Make root interaction with custom data (cast time, mana cost, cooldown, etc.)
+- [x] Put metadata in grimoire when crafting it (InventoryChangeEvent)
 
 ### TWEAKS
 
