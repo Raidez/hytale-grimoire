@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.Utils;
+import dev.raidez.pages.HelloWorldPage;
 import dev.raidez.resources.GrimoireMetadata;
 import dev.raidez.resources.Spell;
 
@@ -29,6 +30,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
         addSubCommand(new CastCommand());
         addSubCommand(new InfuseCommand());
         addSubCommand(new CheckCommand());
+        addSubCommand(new UICommand());
     }
 
     class GiveCommand extends AbstractPlayerCommand {
@@ -229,6 +231,27 @@ public class GrimoireCommand extends AbstractCommandCollection {
             var spells = grimoire.getSpellList();
             commandContext.sendMessage(Message.raw("Current spells in grimoire: " + String.join(", ", spells)));
         }
+    }
+
+    class UICommand extends AbstractPlayerCommand {
+
+        public UICommand() {
+            super("ui", "Open the infuse UI page");
+        }
+
+        @Override
+        protected void execute(
+                CommandContext context,
+                Store<EntityStore> store,
+                Ref<EntityStore> ref,
+                PlayerRef playerRef,
+                World world) {
+
+            var player = store.getComponent(ref, Player.getComponentType());
+            var page = new HelloWorldPage(playerRef);
+            player.getPageManager().openCustomPage(ref, store, page);
+        }
+
     }
 
 }
