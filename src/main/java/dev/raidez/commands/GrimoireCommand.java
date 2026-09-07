@@ -16,7 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.Utils;
-import dev.raidez.pages.HelloWorldPage;
+import dev.raidez.pages.InfusePage;
 import dev.raidez.resources.GrimoireMetadata;
 import dev.raidez.resources.Spell;
 
@@ -241,15 +241,30 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
         @Override
         protected void execute(
-                CommandContext context,
+                CommandContext commandContext,
                 Store<EntityStore> store,
                 Ref<EntityStore> ref,
                 PlayerRef playerRef,
                 World world) {
 
             var player = store.getComponent(ref, Player.getComponentType());
-            var page = new HelloWorldPage(playerRef);
+
+            // Check if the player is holding a grimoire
+            var is = InventoryComponent.getItemInHand(store, ref);
+            if (Utils.isGrimoire(is)) {
+                // Get the grimoire metadata from the item in hand
+                var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
+
+                // Open the infuse UI page with the current spells from the grimoire
+                var page = new InfusePage(playerRef, grimoire.getScrollList());
+                player.getPageManager().openCustomPage(ref, store, page);
+                return;
+            }
+
+            // Open the infuse UI page
+            var page = new InfusePage(playerRef);
             player.getPageManager().openCustomPage(ref, store, page);
+
         }
 
     }

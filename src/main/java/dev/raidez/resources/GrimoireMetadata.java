@@ -47,6 +47,14 @@ public class GrimoireMetadata {
         return List.copyOf(this.spellList);
     }
 
+    public List<String> getScrollList() {
+        var assetMap = Spell.getAssetMap();
+        return this.spellList.stream()
+                .map(assetMap::getAsset)
+                .map(Spell::getItemId)
+                .toList();
+    }
+
     public String getCurrentSpell() {
         if (this.spellList.isEmpty()) {
             return null;

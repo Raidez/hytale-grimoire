@@ -1,0 +1,50 @@
+$Common = "../Common.ui";
+
+$Common.@Container {
+    Anchor: (Width: 860, Height: 640, Top: 200);
+
+    #Title {
+        $Common.@Title { @Text = "Infuse"; }
+    }
+
+    #Content {
+        LayoutMode: Top;
+
+        Group #WheelPanel {
+            LayoutMode: Full;
+            Anchor: (Top: 0, Width: 500, Height: 500);
+
+            ItemSlotButton #Slot0 { ItemSlot #Item {} }
+            ItemSlotButton #Slot1 { ItemSlot #Item {} }
+            ItemSlotButton #Slot2 { ItemSlot #Item {} }
+            ItemSlotButton #Slot3 { ItemSlot #Item {} }
+            ItemSlotButton #Slot4 { ItemSlot #Item {} }
+            ItemSlotButton #Slot5 { ItemSlot #Item {} }
+            ItemSlotButton #Slot6 { ItemSlot #Item {} }
+            ItemSlotButton #Slot7 { ItemSlot #Item {} }
+            ItemSlotButton #Slot8 { ItemSlot #Item {} }
+            ItemSlotButton #Slot9 { ItemSlot #Item {} }
+            ItemSlotButton #Slot10 { ItemSlot #Item {} }
+            ItemSlotButton #Slot11 { ItemSlot #Item {} }
+        }
+
+        Group #ButtonPanel {
+            LayoutMode: Center;
+            Anchor: (Bottom: 0, Height: 100);
+            
+            $Common.@CancelTextButton #CancelButton {
+                @Anchor = (Width: 120);
+                @Text = "Cancel";
+            }
+            
+            Group {
+                Anchor: (Width: 10);
+            }
+
+            $Common.@TextButton #InfuseButton {
+                @Anchor = (Width: 200);
+                @Text = "Infuse";
+            }
+        }
+    }
+}
