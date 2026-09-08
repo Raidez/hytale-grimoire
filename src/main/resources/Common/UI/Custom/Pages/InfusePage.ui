@@ -8,43 +8,60 @@ $Common.@Container {
     }
 
     #Content {
-        LayoutMode: Top;
+        LayoutMode: Full;
 
-        Group #WheelPanel {
-            LayoutMode: Full;
-            Anchor: (Top: 0, Width: 500, Height: 500);
+        Group #Layout {
+            LayoutMode: Top;
+            Anchor: (Full: 0);
 
-            ItemSlotButton #Slot0 { ItemSlot #Item {} }
-            ItemSlotButton #Slot1 { ItemSlot #Item {} }
-            ItemSlotButton #Slot2 { ItemSlot #Item {} }
-            ItemSlotButton #Slot3 { ItemSlot #Item {} }
-            ItemSlotButton #Slot4 { ItemSlot #Item {} }
-            ItemSlotButton #Slot5 { ItemSlot #Item {} }
-            ItemSlotButton #Slot6 { ItemSlot #Item {} }
-            ItemSlotButton #Slot7 { ItemSlot #Item {} }
-            ItemSlotButton #Slot8 { ItemSlot #Item {} }
-            ItemSlotButton #Slot9 { ItemSlot #Item {} }
-            ItemSlotButton #Slot10 { ItemSlot #Item {} }
-            ItemSlotButton #Slot11 { ItemSlot #Item {} }
+            Group #WheelPanel {
+                LayoutMode: Full;
+                Anchor: (Top: 0, Width: 500, Height: 500);
+
+                ItemSlotButton #Slot0 { ItemSlot #Item {} }
+                ItemSlotButton #Slot1 { ItemSlot #Item {} }
+                ItemSlotButton #Slot2 { ItemSlot #Item {} }
+                ItemSlotButton #Slot3 { ItemSlot #Item {} }
+                ItemSlotButton #Slot4 { ItemSlot #Item {} }
+                ItemSlotButton #Slot5 { ItemSlot #Item {} }
+                ItemSlotButton #Slot6 { ItemSlot #Item {} }
+                ItemSlotButton #Slot7 { ItemSlot #Item {} }
+                ItemSlotButton #Slot8 { ItemSlot #Item {} }
+                ItemSlotButton #Slot9 { ItemSlot #Item {} }
+                ItemSlotButton #Slot10 { ItemSlot #Item {} }
+                ItemSlotButton #Slot11 { ItemSlot #Item {} }
+            }
+
+            Group #ButtonPanel {
+                LayoutMode: Center;
+                Anchor: (Bottom: 0, Height: 100);
+                
+                $Common.@CancelTextButton #CancelButton {
+                    @Anchor = (Width: 120);
+                    @Text = "Cancel";
+                }
+                
+                Group {
+                    Anchor: (Width: 10);
+                }
+
+                $Common.@TextButton #InfuseButton {
+                    @Anchor = (Width: 200);
+                    @Text = "Infuse";
+                }
+            }
         }
 
-        Group #ButtonPanel {
-            LayoutMode: Center;
-            Anchor: (Bottom: 0, Height: 100);
-            
-            $Common.@CancelTextButton #CancelButton {
-                @Anchor = (Width: 120);
-                @Text = "Cancel";
-            }
-            
-            Group {
-                Anchor: (Width: 10);
+        Group #Picker {
+            LayoutMode: Left;
+            Visible: false;
+            Anchor: (Width: 500, Height: 500);
+
+            Label #PickerLabel {
+                @Text = "Select an item:";
             }
 
-            $Common.@TextButton #InfuseButton {
-                @Anchor = (Width: 200);
-                @Text = "Infuse";
-            }
+            ItemSlotButton #Pick0 { ItemSlot #Item { itemId: "Scroll_Fireball"; } }
         }
     }
 }

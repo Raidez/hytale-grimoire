@@ -1,6 +1,7 @@
 package dev.raidez.pages;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -27,15 +28,18 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     private final double STEP_ANGLE = Math.PI * 2 / SLOT_COUNT;
 
     private List<String> slots;
+    private List<Vector2i> slotPositions;
 
     public InfusePage(PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
         slots = List.of("", "", "", "Scroll_Fireball", "", "", "", "", "", "", "", "");
+        slotPositions = new ArrayList<>();
     }
 
     public InfusePage(PlayerRef playerRef, List<String> initialSlots) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
         slots = initialSlots;
+        slotPositions = new ArrayList<>();
     }
 
     @Override
@@ -51,6 +55,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         // Build the wheel layout for the slots
         for (int i = 0; i < SLOT_COUNT; i++) {
             var slotPos = calculateSlotPositions(i, 0, 0, 500, 500, 20);
+            slotPositions.add(slotPos);
 
             var anchor = new Anchor();
             anchor.setLeft(Value.of(slotPos.x));
@@ -84,20 +89,26 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     "#Slot" + i,
-                    new EventData().append("Action", Infuse.Action.Slot)
+                    new EventData()
+                            .append("Action", Infuse.Action.Picker)
                             .append("Slot", String.valueOf(i)));
         }
+
+        eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#Pick0",
+                new EventData()
+                        .append("Action", Infuse.Action.Slot)
+                        .append("Slot", "7")
+                        .append("ItemId", "Ingredient_Magic_Ink"));
     }
 
     @Override
     public void handleDataEvent(Ref<EntityStore> ref, Store<EntityStore> store, Infuse data) {
         switch (data.getAction()) {
             case Cancel -> close();
-            case Slot -> {
-                // Handle the slot action here
-                int slot = data.getSlot();
-                setItemSlot(slot, "Ingredient_Magic_Ink"); // Test
-            }
+            case Picker -> openPicker(data);
+            case Slot -> updateSlot(data);
             case Infuse -> {
                 // Handle the infuse action here
             }
@@ -155,6 +166,26 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
 
     private void setItemSlot(int slotIndex, String itemId, UICommandBuilder commandBuilder) {
         commandBuilder.set("#Slot" + slotIndex + " #Item.ItemId", itemId);
+    }
+
+    private void openPicker(Infuse data) {
+        // Calculate picker position
+        var slotPos = slotPositions.get(data.getSlot());
+        var anchor = new Anchor();
+        anchor.setLeft(Value.of(slotPos.x));
+        anchor.setTop(Value.of(slotPos.y));
+
+        // Set picker position and make it visible
+        var commandBuilder = new UICommandBuilder();
+        commandBuilder.setObject("#Picker.Anchor", anchor);
+        commandBuilder.set("#Picker.Visible", true);
+        sendUpdate(commandBuilder);
+    }
+
+    private void updateSlot(Infuse data) {
+        // Handle the slot action here
+        int slot = data.getSlot();
+        setItemSlot(slot, data.getItemId());
     }
 
 }
