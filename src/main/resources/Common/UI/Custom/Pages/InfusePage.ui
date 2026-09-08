@@ -1,7 +1,8 @@
 $Common = "../Common.ui";
+@SlotSize = (Width: 64, Height: 64);
 
 $Common.@Container {
-    Anchor: (Width: 860, Height: 640, Top: 200);
+    Anchor: (Width: 860, Height: 700, Top: 200);
 
     #Title {
         $Common.@Title { @Text = "Infuse"; }
@@ -16,7 +17,7 @@ $Common.@Container {
 
             Group #WheelPanel {
                 LayoutMode: Full;
-                Anchor: (Top: 0, Width: 500, Height: 500);
+                Anchor: (Width: 500, Height: 500);
 
                 ItemSlotButton #Slot0 { ItemSlot #Item {} }
                 ItemSlotButton #Slot1 { ItemSlot #Item {} }
@@ -32,9 +33,13 @@ $Common.@Container {
                 ItemSlotButton #Slot11 { ItemSlot #Item {} }
             }
 
+            Group {
+                Anchor: (Height: 50);
+            }
+
             Group #ButtonPanel {
                 LayoutMode: Center;
-                Anchor: (Bottom: 0, Height: 100);
+                Anchor: (Height: 100);
                 
                 $Common.@CancelTextButton #CancelButton {
                     @Anchor = (Width: 120);
@@ -51,17 +56,61 @@ $Common.@Container {
                 }
             }
         }
+    }
+}
 
-        Group #Picker {
-            LayoutMode: Left;
-            Visible: false;
-            Anchor: (Width: 500, Height: 500);
+$Common.@Panel #Picker {
+    Padding: (Full: 10);
+    LayoutMode: Top;
+    Visible: false;
 
-            Label #PickerLabel {
-                @Text = "Select an item:";
+    Group #Row0 {
+        LayoutMode: Left;
+
+        Group {
+            Anchor: @SlotSize;
+            Button #ClosePicker {
+                Anchor: (Width: 32, Height: 32);
+                
+                AssetImage { AssetPath: "Common/ContainerCloseButton@2x.png"; }
             }
-
-            ItemSlotButton #Pick0 { ItemSlot #Item { itemId: "Scroll_Fireball"; } }
         }
+        ItemSlotButton #Pick0 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick1 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick2 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick3 { Anchor: @SlotSize; ItemSlot #Item {} }
+    }
+
+    Group #Row1 {
+        Visible: false;
+        LayoutMode: Left;
+
+        ItemSlotButton #Pick4 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick5 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick6 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick7 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick8 { Anchor: @SlotSize; ItemSlot #Item {} }
+    }
+
+    Group #Row2 {
+        Visible: false;
+        LayoutMode: Left;
+
+        ItemSlotButton #Pick9 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick10 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick11 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick12 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick13 { Anchor: @SlotSize; ItemSlot #Item {} }
+    }
+
+    Group #Row3 {
+        Visible: false;
+        LayoutMode: Left;
+
+        ItemSlotButton #Pick14 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick15 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick16 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick17 { Anchor: @SlotSize; ItemSlot #Item {} }
+        ItemSlotButton #Pick18 { Anchor: @SlotSize; ItemSlot #Item {} }
     }
 }
