@@ -1,0 +1,4 @@
+ItemSlotButton {
+    Anchor: (Width: 64, Height: 64);
+    ItemSlot #Item {}
+}

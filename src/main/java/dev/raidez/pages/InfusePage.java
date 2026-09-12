@@ -1,16 +1,14 @@
 package dev.raidez.pages;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.Vector2i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -19,38 +17,43 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+import dev.raidez.GrimoirePlugin;
 import dev.raidez.resources.Infuse;
 
 public class InfusePage extends InteractiveCustomUIPage<Infuse> {
 
+    private static final HytaleLogger LOGGER = GrimoirePlugin.get().getLogger();
+    private static final String INFUSE_PAGE_UI = "Pages/InfusePage.ui";
+    private static final String SPELL_ENTRY_UI = "Pages/SpellEntry.ui";
+    private static final String WHEEL_SLOT_UI = "Pages/WheelSlot.ui";
+
     private final int SLOT_SIZE = 64;
     private final int SLOT_COUNT = 12;
-    private final int PICKER_SLOT_COUNT = 19;
-
-    private final Vector2i PICKER_SIZE = new Vector2i(64 * 5 + 20, 64 * 2 + 20);
-    private final Vector2i PICKER_PADDING = new Vector2i(640, 330);
-
     private final double START_ANGLE = Math.PI / 12;
     private final double STEP_ANGLE = Math.PI * 2 / SLOT_COUNT;
 
-    private List<String> slots;
-    private List<String> pickerSlots;
-    private List<Vector2i> slotPositions;
-    private int lastSlot = -1;
-    private int rowCount = 1;
+    private List<String> initialSlots;
+    private int selectedSlotIndex = -1;
+    private List<String> spellList;
 
-    public InfusePage(PlayerRef playerRef) {
+    public InfusePage(PlayerRef playerRef, List<String> initialSlots, List<String> spellList) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
-        slots = List.of("", "", "", "Scroll_Fireball", "", "", "", "", "", "", "", "");
-        slotPositions = new ArrayList<>();
-        pickerSlots = new ArrayList<>();
+        this.initialSlots = initialSlots;
+        this.spellList = spellList;
     }
 
     public InfusePage(PlayerRef playerRef, List<String> initialSlots) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
-        slots = initialSlots;
-        slotPositions = new ArrayList<>();
-        pickerSlots = new ArrayList<>();
+        this.initialSlots = initialSlots;
+        this.spellList = List.of("Fireball 1", "Fireball 2", "Fireball 3", "Fireball 4", "Fireball 5");
+    }
+
+    public InfusePage(PlayerRef playerRef) {
+        this(playerRef,
+                List.of("", "", "", "Scroll_Fireball", "", "", "", "", "", "", "", ""),
+                List.of("Fireball 1", "Fireball 2", "Fireball 3", "Fireball 4", "Fireball 5", "Fireball 6",
+                        "Fireball 7", "Fireball 8", "Fireball 9", "Fireball 10", "Fireball 11", "Fireball 12",
+                        "Fireball 13"));
     }
 
     @Override
@@ -61,38 +64,15 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             Store<EntityStore> store) {
 
         // Append the UI page
-        commandBuilder.append("Pages/InfusePage.ui");
+        commandBuilder.append(INFUSE_PAGE_UI);
 
         // Build the wheel layout for the slots and bind their events
-        for (int i = 0; i < SLOT_COUNT; i++) {
-            var slotPos = calculateSlotPositions(i, 0, 0, 500, 500, 20);
-            slotPositions.add(slotPos);
+        buildSlotWheel(commandBuilder, eventBuilder);
 
-            var anchor = new Anchor();
-            anchor.setLeft(Value.of(slotPos.x));
-            anchor.setTop(Value.of(slotPos.y));
-            anchor.setWidth(Value.of(SLOT_SIZE));
-            anchor.setHeight(Value.of(SLOT_SIZE));
+        // Build the spell list for the infuse page
+        buildSpellList(commandBuilder, eventBuilder);
 
-            commandBuilder.setObject("#Slot" + i + ".Anchor", anchor);
-
-            eventBuilder.addEventBinding(
-                    CustomUIEventBindingType.Activating,
-                    "#Slot" + i,
-                    new EventData()
-                            .append("Action", Infuse.Action.Picker)
-                            .append("Slot", String.valueOf(i)));
-        }
-
-        // Set initial items for the slots based on the slots list
-        for (int i = 0; i < slots.size(); i++) {
-            var itemId = slots.get(i);
-            if (!itemId.isEmpty()) {
-                setItemSlot(i, itemId, commandBuilder);
-            }
-        }
-
-        // Bind events
+        // Bind global events
         eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 "#CancelButton",
@@ -101,53 +81,84 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
                 CustomUIEventBindingType.Activating,
                 "#InfuseButton",
                 new EventData().append("Action", Infuse.Action.Infuse));
-        eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#ClosePicker",
-                new EventData()
-                        .append("Action", Infuse.Action.Slot)
-                        .append("ItemId", ""));
-
-        // Handle picker slots for the scroll items
-        var scrollItems = getAllScrollItem(ref, store);
-        for (int i = 0; i < Math.min(PICKER_SLOT_COUNT, scrollItems.size()); i++) {
-            var item = scrollItems.get(i);
-
-            commandBuilder.set("#Pick" + i + " #Item.ItemId", item);
-
-            eventBuilder.addEventBinding(
-                    CustomUIEventBindingType.Activating,
-                    "#Pick" + i,
-                    new EventData()
-                            .append("Action", Infuse.Action.Slot)
-                            .append("ItemId", item));
-
-            pickerSlots.add(item);
-        }
-
-        if (scrollItems.size() > 4) {
-            commandBuilder.set("#Row1.Visible", true);
-            rowCount++;
-        }
-        if (scrollItems.size() > 9) {
-            commandBuilder.set("#Row2.Visible", true);
-            rowCount++;
-        }
-        if (scrollItems.size() > 14) {
-            commandBuilder.set("#Row3.Visible", true);
-            rowCount++;
-        }
     }
 
     @Override
     public void handleDataEvent(Ref<EntityStore> ref, Store<EntityStore> store, Infuse data) {
         switch (data.getAction()) {
             case Cancel -> close();
-            case Picker -> openPicker(data);
-            case Slot -> updateSlot(data);
-            case Infuse -> {
-                // Handle the infuse action here
+            case OpenSlot -> openSlot(data);
+            case UpdateSlot -> updateSlot(data);
+            case Infuse -> infuse();
+        }
+    }
+
+    /**
+     * Builds the circular slot wheel for the infuse page.
+     * 
+     * @param commandBuilder
+     * @param eventBuilder
+     */
+    private void buildSlotWheel(
+            UICommandBuilder commandBuilder,
+            UIEventBuilder eventBuilder) {
+
+        LOGGER.atInfo().log("Building slot wheel with " + SLOT_COUNT + " slots.");
+
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            var slotPos = calculateSlotPositions(i, 0, 0, 500, 500, 20);
+
+            var anchor = new Anchor();
+            anchor.setLeft(Value.of(slotPos.x));
+            anchor.setTop(Value.of(slotPos.y));
+            anchor.setWidth(Value.of(SLOT_SIZE));
+            anchor.setHeight(Value.of(SLOT_SIZE));
+
+            // Append the wheel slot UI to the wheel panel
+            commandBuilder.append("#WheelPanel", WHEEL_SLOT_UI);
+            commandBuilder.setObject("#WheelPanel[%s].Anchor".formatted(i), anchor);
+
+            // Bind the slot to the corresponding event
+            eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#WheelPanel[%s]".formatted(i),
+                    new EventData()
+                            .append("Action", Infuse.Action.OpenSlot)
+                            .append("Slot", String.valueOf(i)));
+
+            // Set the initial item for the slot if available
+            var itemId = initialSlots.get(i);
+            if (!itemId.isEmpty()) {
+                commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(i), itemId);
             }
+        }
+    }
+
+    /**
+     * Builds the spell list for the infuse page.
+     * 
+     * @param commandBuilder
+     * @param eventBuilder
+     */
+    private void buildSpellList(
+            UICommandBuilder commandBuilder,
+            UIEventBuilder eventBuilder) {
+
+        LOGGER.atInfo().log("Building spell list with " + spellList.size() + " spells.");
+
+        for (int i = 0; i < spellList.size(); i++) {
+            var spell = spellList.get(i);
+
+            commandBuilder.append("#SpellPanel", SPELL_ENTRY_UI);
+            commandBuilder.set("#SpellPanel[%s] #Icon.ItemId".formatted(i), "Scroll_Fireball");
+            commandBuilder.set("#SpellPanel[%s] #Name.Text".formatted(i), spell);
+            commandBuilder.set("#SpellPanel[%s] #Cost.Text".formatted(i), "1");
+            eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#SpellPanel[%s]".formatted(i),
+                    new EventData()
+                            .append("Action", Infuse.Action.UpdateSlot)
+                            .append("ItemId", spell));
         }
     }
 
@@ -194,69 +205,21 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         return new Vector2i(slotLeft, slotTop);
     }
 
-    private void setItemSlot(int slotIndex, String itemId) {
-        var commandBuilder = new UICommandBuilder();
-        commandBuilder.set("#Slot" + slotIndex + " #Item.ItemId", itemId);
-        sendUpdate(commandBuilder);
-    }
-
-    private void setItemSlot(int slotIndex, String itemId, UICommandBuilder commandBuilder) {
-        commandBuilder.set("#Slot" + slotIndex + " #Item.ItemId", itemId);
-    }
-
-    private void openPicker(Infuse data) {
-        // Calculate picker position
-        var slotPos = slotPositions.get(data.getSlot());
-        var anchor = new Anchor();
-        anchor.setLeft(Value.of(slotPos.x + PICKER_PADDING.x));
-        anchor.setTop(Value.of(slotPos.y + PICKER_PADDING.y));
-        anchor.setWidth(Value.of(PICKER_SIZE.x));
-        anchor.setHeight(Value.of(64 * rowCount + 20));
-
-        // Set picker position and make it visible
-        var commandBuilder = new UICommandBuilder();
-        commandBuilder.setObject("#Picker.Anchor", anchor);
-        commandBuilder.set("#Picker.Visible", true);
-        sendUpdate(commandBuilder);
-
-        lastSlot = data.getSlot();
-    }
-
-    private void closePicker() {
-        var commandBuilder = new UICommandBuilder();
-        commandBuilder.set("#Picker.Visible", false);
-        sendUpdate(commandBuilder);
+    private void openSlot(Infuse data) {
+        LOGGER.atInfo().log("Opening slot: " + data.getSlot());
+        selectedSlotIndex = data.getSlot();
+        sendUpdate();
     }
 
     private void updateSlot(Infuse data) {
-        // Handle the slot action here
-        int slot = lastSlot;
-        setItemSlot(slot, data.getItemId());
-        closePicker();
+        LOGGER.atInfo().log("Updating slot: " + selectedSlotIndex + " with item: " + data.getItemId());
+        var commandBuilder = new UICommandBuilder();
+        commandBuilder.set("#WheelPanel[" + selectedSlotIndex + "] #Item.ItemId", data.getItemId());
+        sendUpdate(commandBuilder);
     }
 
-    private List<String> getAllScrollItem(Ref<EntityStore> ref, Store<EntityStore> store) {
-        var found = new ArrayList<String>();
-
-        var inventory = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        for (short i = 0; i < inventory.getCapacity(); i++) {
-            var is = inventory.getItemStack(i);
-            if (is == null || is.isEmpty()) {
-                continue;
-            }
-
-            // Check if the item has scroll tag
-            var item = is.getItem();
-            var tagIndex = AssetRegistry.getOrCreateTagIndex("Scroll");
-            var tags = item.getData().getTags();
-            if (!tags.containsKey(tagIndex)) {
-                continue;
-            }
-
-            found.add(item.getId());
-        }
-
-        return found;
+    private void infuse() {
+        close();
     }
 
 }

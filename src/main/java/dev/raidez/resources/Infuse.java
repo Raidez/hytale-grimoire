@@ -8,10 +8,14 @@ import com.hypixel.hytale.codec.codecs.EnumCodec;
 public class Infuse {
 
     public enum Action {
-        Cancel, // Cancel button, close the UI
-        Infuse, // Validate infuse, close the UI, update grimoire metadata
-        Picker, // Open the item picker with available scrolls
-        Slot,   // Update a specific slot with the selected item
+        /** Cancel button, close the UI */
+        Cancel,
+        /** Validate infuse, close the UI, update grimoire metadata */
+        Infuse,
+        /** Open spell list on the selected slot */
+        OpenSlot,
+        /** Update a specific slot with the selected item */
+        UpdateSlot,
     }
 
     private Action action;
