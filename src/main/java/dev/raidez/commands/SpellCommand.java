@@ -27,7 +27,6 @@ public class SpellCommand extends AbstractCommandCollection {
 
     public SpellCommand() {
         super("spell", "Spell command");
-        addAliases("sp");
         addSubCommand(new GiveCommand());
         addSubCommand(new CheckCommand());
         addSubCommand(new CastCommand());

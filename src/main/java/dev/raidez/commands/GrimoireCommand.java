@@ -25,7 +25,6 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
     public GrimoireCommand() {
         super("grimoire", "Grimoire commande");
-        addAliases("grim");
         addSubCommand(new GiveCommand());
         addSubCommand(new SlotCommand());
         addSubCommand(new CastCommand());

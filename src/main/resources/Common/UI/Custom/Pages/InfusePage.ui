@@ -18,15 +18,38 @@ $Common.@Container {
                 LayoutMode: Full;
                 Anchor: (Width: 500);
                 // Background: #ff0000;
+
+                Group #SlotList {
+
+                }
             }
 
             Group #SpellPanel {
-                Visible: false;
                 LayoutMode: TopScrolling;
                 Anchor: (Width: 325);
                 Padding: (Left: 20, Right: 10, Top: 100, Bottom: 100);
                 ScrollbarStyle: $Common.@DefaultScrollbarStyle;
                 // Background: #0059ff;
+
+                Button #EmptyButton {
+                    Anchor: (Height: 50);
+                    Padding: (Full: 6);
+                    Style: (
+                        Hovered: (
+                            Background: #000000(0.2),
+                        )
+                    );
+
+                    Label {
+                        Padding: (Horizontal: 50, Vertical: 5);
+                        Style: (RenderBold: true, VerticalAlignment: Center);
+                        Text: "Empty";
+                    }
+                }
+
+                Group #SpellList {
+
+                }
             }
         }
 
