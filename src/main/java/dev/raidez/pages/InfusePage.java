@@ -1,5 +1,6 @@
 package dev.raidez.pages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hypixel.hytale.component.Ref;
@@ -9,6 +10,7 @@ import com.hypixel.hytale.protocol.Vector2i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -18,7 +20,10 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.GrimoirePlugin;
+import dev.raidez.Utils;
+import dev.raidez.resources.GrimoireMetadata;
 import dev.raidez.resources.Infuse;
+import dev.raidez.resources.Spell;
 
 public class InfusePage extends InteractiveCustomUIPage<Infuse> {
 
@@ -36,28 +41,55 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     private final double START_ANGLE = Math.PI / 12;
     private final double STEP_ANGLE = Math.PI * 2 / SLOT_COUNT;
 
-    private List<String> initialSlots;
+    private List<String> initialSlots = new ArrayList<>();
     private int selectedSlotIndex = -1;
-    private List<String> spellList;
+    private List<Spell> spellList = new ArrayList<>();
 
-    public InfusePage(PlayerRef playerRef, List<String> initialSlots, List<String> spellList) {
+    public InfusePage(PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
-        this.initialSlots = initialSlots;
-        this.spellList = spellList;
+        populateInitialSlots(playerRef);
+        populateSpellList(playerRef);
     }
 
     public InfusePage(PlayerRef playerRef, List<String> initialSlots) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
         this.initialSlots = initialSlots;
-        this.spellList = List.of("Fireball 1", "Fireball 2", "Fireball 3", "Fireball 4", "Fireball 5");
+        populateSpellList(playerRef);
     }
 
-    public InfusePage(PlayerRef playerRef) {
-        this(playerRef,
-                List.of("", "", "", "Scroll_Fireball", "", "", "", "", "", "", "", ""),
-                List.of("Fireball 1", "Fireball 2", "Fireball 3", "Fireball 4", "Fireball 5", "Fireball 6",
-                        "Fireball 7", "Fireball 8", "Fireball 9", "Fireball 10", "Fireball 11", "Fireball 12",
-                        "Fireball 13"));
+    private void populateInitialSlots(PlayerRef playerRef) {
+        var ref = playerRef.getReference();
+        var store = playerRef.getReference().getStore();
+
+        var is = InventoryComponent.getItemInHand(store, ref);
+        if (Utils.isGrimoire(is)) {
+            // Get the grimoire metadata from the item in hand
+            var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY,
+                    GrimoireMetadata.CODEC);
+            this.initialSlots = grimoire.getScrollList();
+        }
+    }
+
+    private void populateSpellList(PlayerRef playerRef) {
+        var ref = playerRef.getReference();
+        var store = playerRef.getReference().getStore();
+        var scrolls = new ArrayList<Spell>();
+
+        // Get all the spells from the player's inventory as scrolls
+        var inventory = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+        for (short slot = 0; slot < inventory.getCapacity(); slot++) {
+            var is = inventory.getItemStack(slot);
+            if (is == null || !Utils.isScroll(is)) {
+                continue;
+            }
+
+            var spell = Spell.getFromItem(is.getItem());
+            if (spell != null) {
+                scrolls.add(spell);
+            }
+        }
+
+        this.spellList = scrolls;
     }
 
     @Override
@@ -131,9 +163,11 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
                             .append("Slot", String.valueOf(i)));
 
             // Set the initial item for the slot if available
-            var itemId = initialSlots.get(i);
-            if (!itemId.isEmpty()) {
-                commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(i), itemId);
+            if (initialSlots.size() > i) {
+                var itemId = initialSlots.get(i);
+                if (!itemId.isEmpty()) {
+                    commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(i), itemId);
+                }
             }
         }
     }
@@ -154,15 +188,18 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             var spell = spellList.get(i);
 
             commandBuilder.append("#SpellPanel", SPELL_ENTRY_UI);
-            commandBuilder.set("#SpellPanel[%s] #Icon.ItemId".formatted(i), "Scroll_Fireball");
-            commandBuilder.set("#SpellPanel[%s] #Name.Text".formatted(i), spell);
-            commandBuilder.set("#SpellPanel[%s] #Cost.Text".formatted(i), "1");
+            commandBuilder.set("#SpellPanel[%s] #Icon.ItemId".formatted(i),
+                    spell.getTexture() != null ? spell.getTexture() : "");
+            commandBuilder.set("#SpellPanel[%s] #Name.Text".formatted(i), spell.getName());
+            commandBuilder.set("#SpellPanel[%s].TooltipText".formatted(i),
+                    spell.getDescription() != null ? spell.getDescription() : "");
+            commandBuilder.set("#SpellPanel[%s] #Level.Text".formatted(i), String.valueOf(spell.getLevel()));
             eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     "#SpellPanel[%s]".formatted(i),
                     new EventData()
                             .append("Action", Infuse.Action.UpdateSlot)
-                            .append("ItemId", spell));
+                            .append("ItemId", spell.getItemId() != null ? spell.getItemId() : "Scroll_Fireball"));
         }
     }
 
@@ -211,14 +248,25 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
 
     private void openSlot(Infuse data) {
         LOGGER.atInfo().log("Opening slot: " + data.getSlot());
-        selectedSlotIndex = data.getSlot();
 
-        // Update the style of the selected slot to indicate it is open
         var commandBuilder = new UICommandBuilder();
+
+        // Reset the style of all slots to the default style before opening a new one
         for (int i = 0; i < SLOT_COUNT; i++) {
             commandBuilder.set("#WheelPanel[%s].Style".formatted(i), DEFAULT_STYLE);
         }
+
+        // If the slot being opened is already the selected slot, close it and return
+        if (data.getSlot() == selectedSlotIndex) {
+            commandBuilder.set("#SpellPanel.Visible", false);
+            sendUpdate(commandBuilder);
+            return;
+        }
+
+        // Update the style of the selected slot to indicate it is open
+        selectedSlotIndex = data.getSlot();
         commandBuilder.set("#WheelPanel[%s].Style".formatted(selectedSlotIndex), SELECTED_STYLE);
+        commandBuilder.set("#SpellPanel.Visible", true);
         sendUpdate(commandBuilder);
     }
 
@@ -228,10 +276,11 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         // Update the item and reset the style of the slot to the default style
         var commandBuilder = new UICommandBuilder();
         commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(selectedSlotIndex), data.getItemId());
-        for (int i = 0; i < SLOT_COUNT; i++) {
-            commandBuilder.set("#WheelPanel[%s].Style".formatted(i), DEFAULT_STYLE);
-        }
+        commandBuilder.set("#WheelPanel[%s].Style".formatted(selectedSlotIndex), DEFAULT_STYLE);
+        commandBuilder.set("#SpellPanel.Visible", false);
         sendUpdate(commandBuilder);
+
+        selectedSlotIndex = -1;
     }
 
     private void infuse() {

@@ -1,5 +1,6 @@
 package dev.raidez;
 
+import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionType;
@@ -15,6 +16,30 @@ public class Utils {
     public static boolean isGrimoire(ItemStack is) {
         return is != null && is.getItemId().equals("Weapon_Grimoire");
     }
+
+    public static boolean isScroll(ItemStack is) {
+        var tagIndex = AssetRegistry.getOrCreateTagIndex("Scroll");
+        var tags = is.getItem().getData().getTags();
+        if (!tags.containsKey(tagIndex)) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * public static Spell getFromItemStack(ItemStack is) {
+     * // Check if the item has spell tag
+     * var tagIndex = AssetRegistry.getOrCreateTagIndex(Spell.SCROLL_TAG);
+     * var tags = is.getItem().getData().getTags();
+     * if (!tags.containsKey(tagIndex)) {
+     * return null;
+     * }
+     * 
+     * // Get the spell
+     * var spell = Spell.getFromItem(is.getItem());
+     * return spell;
+     * }
+     */
 
     /**
      * Create a new interaction context and execute the given interaction.

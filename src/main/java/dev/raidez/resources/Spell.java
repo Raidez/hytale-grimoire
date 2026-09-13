@@ -27,6 +27,8 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
 
     public static final ValidatorCache<String> VALIDATOR_CACHE;
 
+    public static final String SCROLL_TAG = "Scroll";
+
     static {
         VALIDATOR_CACHE = new ValidatorCache<>(new AssetKeyValidator<>(Spell::getAssetStore));
     }
@@ -37,6 +39,7 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     private String itemId;
     private String name;
     private String description;
+    private int level;
     private float manaCost;
     private float cooldown;
     private float castTime;
@@ -53,6 +56,8 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
             .append(new KeyedCodec<>("Name", Codec.STRING), Spell::setName, Spell::getName)
             .add()
             .append(new KeyedCodec<>("Description", Codec.STRING), Spell::setDescription, Spell::getDescription)
+            .add()
+            .append(new KeyedCodec<>("Level", Codec.INTEGER), Spell::setLevel, Spell::getLevel)
             .add()
             .append(new KeyedCodec<>("ManaCost", Codec.FLOAT), Spell::setManaCost, Spell::getManaCost)
             .add()
@@ -99,6 +104,20 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
         return spellId + "_Cast";
     }
 
+    /* Constructors */
+
+    private Spell() {
+    }
+
+    public Spell(String name, String description, int level) {
+        this();
+        this.name = name;
+        this.description = description;
+        this.level = level;
+    }
+
+    /* Accessors */
+
     @Override
     public String getId() {
         return id;
@@ -111,8 +130,6 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     public Interaction getInteraction() {
         return Interaction.getAssetMap().getAsset(interactionId);
     }
-
-    // #region Getters and Setters
 
     public String getItemId() {
         return itemId;
@@ -136,6 +153,14 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public float getManaCost() {
@@ -177,7 +202,5 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     public void setTexture(String texture) {
         this.texture = texture;
     }
-
-    // #endregion
 
 }

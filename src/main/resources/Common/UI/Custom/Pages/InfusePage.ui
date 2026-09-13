@@ -21,6 +21,7 @@ $Common.@Container {
             }
 
             Group #SpellPanel {
+                Visible: false;
                 LayoutMode: TopScrolling;
                 Anchor: (Width: 325);
                 Padding: (Left: 20, Right: 10, Top: 100, Bottom: 100);

@@ -1,3 +1,5 @@
+$Common = "../Common.ui";
+
 Button {
     LayoutMode: Left;
     Anchor: (Height: 50);
@@ -7,6 +9,9 @@ Button {
             Background: #000000(0.2),
         )
     );
+
+    TooltipText: "";
+    TextTooltipStyle: $Common.@DefaultTextTooltipStyle;
 
     ItemIcon #Icon {
         Anchor: (Width: 40, Height: 40);
@@ -18,7 +23,7 @@ Button {
         FlexWeight: 1;
     }
 
-    Label #Cost {
+    Label #Level {
         Padding: (Horizontal: 10, Vertical: 5);
         Style: (TextColor: #ffffff(0.6), VerticalAlignment: Center);
     }

@@ -18,13 +18,13 @@
         Background: #8b3fd1,
     ),
     Hovered: (
-        Background: #344354,
+        Background: #a35de0,
     ),
     Pressed: (
-        Background: #1a222c,
+        Background: #6d299f,
     ),
     Disabled: (
-        Background: #111820,
+        Background: #4c3261,
     ),
 );
 
@@ -33,13 +33,13 @@
         Background: #a83232,
     ),
     Hovered: (
-        Background: #344354,
+        Background: #c84b4b,
     ),
     Pressed: (
-        Background: #1a222c,
+        Background: #842323,
     ),
     Disabled: (
-        Background: #111820,
+        Background: #612f2f,
     ),
 );
 
