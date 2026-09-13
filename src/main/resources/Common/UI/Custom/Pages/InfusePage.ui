@@ -26,9 +26,10 @@ $Common.@Container {
 
             Group #SpellPanel {
                 LayoutMode: TopScrolling;
+                ScrollbarStyle: $Common.@DefaultScrollbarStyle;
                 Anchor: (Width: 325);
                 Padding: (Left: 20, Right: 10, Top: 100, Bottom: 100);
-                ScrollbarStyle: $Common.@DefaultScrollbarStyle;
+                Visible: false;
                 // Background: #0059ff;
 
                 Button #EmptyButton {
@@ -48,7 +49,7 @@ $Common.@Container {
                 }
 
                 Group #SpellList {
-
+                    LayoutMode: Top;
                 }
             }
         }

@@ -319,6 +319,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     }
 
     private void infuse() {
+        LOGGER.atInfo().log("Infusing item in slot: %s", slots);
         close();
     }
 
