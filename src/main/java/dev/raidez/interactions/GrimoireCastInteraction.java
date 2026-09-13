@@ -9,7 +9,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Sim
 
 import dev.raidez.GrimoirePlugin;
 import dev.raidez.Utils;
-import dev.raidez.resources.GrimoireMetadata;
+import dev.raidez.resources.Grimoire;
 import dev.raidez.resources.Spell;
 
 public class GrimoireCastInteraction extends SimpleInstantInteraction {
@@ -37,7 +37,7 @@ public class GrimoireCastInteraction extends SimpleInstantInteraction {
         }
 
         // Get the grimoire metadata and the current spell
-        var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
+        var grimoire = is.getFromMetadataOrDefault(Grimoire.KEY, Grimoire.CODEC);
         var spellId = grimoire.getCurrentSpell();
         if (spellId == null) {
             LOGGER.atWarning().log("GrimoireCastInteraction: No spell selected in the grimoire");

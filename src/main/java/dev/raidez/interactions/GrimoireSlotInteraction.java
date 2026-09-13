@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Sim
 
 import dev.raidez.GrimoirePlugin;
 import dev.raidez.Utils;
-import dev.raidez.resources.GrimoireMetadata;
+import dev.raidez.resources.Grimoire;
 
 public class GrimoireSlotInteraction extends SimpleInstantInteraction {
 
@@ -44,12 +44,12 @@ public class GrimoireSlotInteraction extends SimpleInstantInteraction {
         }
 
         // Change the spell slot
-        var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
-        grimoire.changeSpellSlot(1);
+        var grimoire = is.getFromMetadataOrDefault(Grimoire.KEY, Grimoire.CODEC);
+        grimoire.changeSpellSlot(grimoire.getCurrentSlot() + 1);
 
         // Update the item stack with the new metadata
-        var newIs = is.withMetadata(GrimoireMetadata.KEYED_CODEC, grimoire);
+        var newIs = is.withMetadata(Grimoire.KEYED_CODEC, grimoire);
         inventory.getInventory().replaceItemStackInSlot(inventory.getActiveSlot(), is, newIs);
-        LOGGER.atInfo().log("GrimoireSlotInteraction: Changed spell slot");
+        LOGGER.atInfo().log("GrimoireSlotInteraction: Changed spell slot to %s", grimoire.getCurrentSlot());
     }
 }

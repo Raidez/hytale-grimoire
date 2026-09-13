@@ -4,7 +4,7 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerCraftEvent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 
-import dev.raidez.resources.GrimoireMetadata;
+import dev.raidez.resources.Grimoire;
 
 /**
  * @deprecated Use GrimoireInventoryChangeHandler instead.
@@ -40,8 +40,8 @@ public class CraftGrimoireHandler {
     }
 
     private static ItemStack ensureMetadata(ItemStack is) {
-        var meta = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
-        return is.withMetadata(GrimoireMetadata.KEYED_CODEC, meta);
+        var meta = is.getFromMetadataOrDefault(Grimoire.KEY, Grimoire.CODEC);
+        return is.withMetadata(Grimoire.KEYED_CODEC, meta);
     }
 
 }

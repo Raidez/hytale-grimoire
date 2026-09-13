@@ -21,7 +21,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.GrimoirePlugin;
-import dev.raidez.resources.GrimoireMetadata;
+import dev.raidez.resources.Grimoire;
 
 public class GrimoireInventoryChangeHandler extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
@@ -59,7 +59,7 @@ public class GrimoireInventoryChangeHandler extends EntityEventSystem<EntityStor
                 continue;
 
             // Check if the item stack already has grimoire metadata
-            if (is.getFromMetadataOrNull(GrimoireMetadata.KEYED_CODEC) != null)
+            if (is.getFromMetadataOrNull(Grimoire.KEYED_CODEC) != null)
                 continue;
 
             // Replace the grimoire with metadata
@@ -70,8 +70,8 @@ public class GrimoireInventoryChangeHandler extends EntityEventSystem<EntityStor
     }
 
     private static ItemStack ensureMetadata(ItemStack is) {
-        var meta = is.getFromMetadataOrDefault(GrimoireMetadata.KEY, GrimoireMetadata.CODEC);
-        return is.withMetadata(GrimoireMetadata.KEYED_CODEC, meta);
+        var meta = is.getFromMetadataOrDefault(Grimoire.KEY, Grimoire.CODEC);
+        return is.withMetadata(Grimoire.KEYED_CODEC, meta);
     }
 
     /**

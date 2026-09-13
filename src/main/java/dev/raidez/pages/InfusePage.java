@@ -21,7 +21,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.GrimoirePlugin;
 import dev.raidez.Utils;
-import dev.raidez.resources.GrimoireMetadata;
 import dev.raidez.resources.Infuse;
 import dev.raidez.resources.Spell;
 
@@ -41,33 +40,19 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     private final double START_ANGLE = Math.PI / 12;
     private final double STEP_ANGLE = Math.PI * 2 / SLOT_COUNT;
 
-    private List<String> initialSlots = new ArrayList<>();
+    private String[] initialSlots = new String[12];
     private int selectedSlotIndex = -1;
     private List<Spell> spellList = new ArrayList<>();
 
     public InfusePage(PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
-        populateInitialSlots(playerRef);
         populateSpellList(playerRef);
     }
 
-    public InfusePage(PlayerRef playerRef, List<String> initialSlots) {
+    public InfusePage(PlayerRef playerRef, String[] initialSlots) {
         super(playerRef, CustomPageLifetime.CanDismiss, Infuse.CODEC);
         this.initialSlots = initialSlots;
         populateSpellList(playerRef);
-    }
-
-    private void populateInitialSlots(PlayerRef playerRef) {
-        var ref = playerRef.getReference();
-        var store = playerRef.getReference().getStore();
-
-        var is = InventoryComponent.getItemInHand(store, ref);
-        if (Utils.isGrimoire(is)) {
-            // Get the grimoire metadata from the item in hand
-            var grimoire = is.getFromMetadataOrDefault(GrimoireMetadata.KEY,
-                    GrimoireMetadata.CODEC);
-            this.initialSlots = grimoire.getScrollList();
-        }
     }
 
     private void populateSpellList(PlayerRef playerRef) {
@@ -163,11 +148,9 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
                             .append("Slot", String.valueOf(i)));
 
             // Set the initial item for the slot if available
-            if (initialSlots.size() > i) {
-                var itemId = initialSlots.get(i);
-                if (!itemId.isEmpty()) {
-                    commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(i), itemId);
-                }
+            var itemId = initialSlots[i];
+            if (itemId != null && !itemId.isEmpty()) {
+                commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(i), itemId);
             }
         }
     }

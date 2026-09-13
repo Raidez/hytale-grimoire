@@ -3,7 +3,6 @@ package dev.raidez.commands;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
-import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -89,13 +88,13 @@ public class SpellCommand extends AbstractCommandCollection {
 
             // Check if the player is holding an item
             var is = InventoryComponent.getItemInHand(store, ref);
-            if (is == null) {
+            if (is == null || !Utils.isScroll(is)) {
                 commandContext.sendMessage(Message.raw("You must hold a scroll!"));
                 return;
             }
 
-            // Check if the item has spell tag and get the spell
-            var spell = checkPrerequisites(is);
+            // Get the spell linked to the item in hand
+            var spell = Spell.getFromItem(is.getItem());
             if (spell == null) {
                 commandContext.sendMessage(Message.raw("This scroll has no spell linked to it!"));
                 return;
@@ -163,15 +162,15 @@ public class SpellCommand extends AbstractCommandCollection {
 
             } else if (Which.HAND.equals(which)) {
 
-                // Check if the player is holding an item
+                // Check if the player is holding a scroll
                 var is = InventoryComponent.getItemInHand(store, ref);
-                if (is == null) {
+                if (is == null || !Utils.isScroll(is)) {
                     commandContext.sendMessage(Message.raw("You must hold a scroll!"));
                     return;
                 }
 
-                // Check if the item has spell tag and get the spell
-                var spell = checkPrerequisites(is);
+                // Get the spell from the item in hand
+                var spell = Spell.getFromItem(is.getItem());
                 if (spell == null) {
                     commandContext.sendMessage(Message.raw("This scroll has no spell linked to it!"));
                     return;
@@ -185,25 +184,6 @@ public class SpellCommand extends AbstractCommandCollection {
             commandContext.sendMessage(Message.raw("You have cast the spell!"));
         }
 
-    }
-
-    /**
-     * Check if the item has spell tag and return the spell if it does
-     * 
-     * @param is
-     * @return
-     */
-    private Spell checkPrerequisites(ItemStack is) {
-        // Check if the item has spell tag
-        var tagIndex = AssetRegistry.getOrCreateTagIndex("Scroll");
-        var tags = is.getItem().getData().getTags();
-        if (!tags.containsKey(tagIndex)) {
-            return null;
-        }
-
-        // Get the spell
-        var spell = Spell.getFromItem(is.getItem());
-        return spell;
     }
 
 }
