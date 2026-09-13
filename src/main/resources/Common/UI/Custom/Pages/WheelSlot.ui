@@ -1,4 +1,52 @@
+@DefaultStyle = ButtonStyle(
+    Default: (
+        Background: #252f3a,
+    ),
+    Hovered: (
+        Background: #344354,
+    ),
+    Pressed: (
+        Background: #1a222c,
+    ),
+    Disabled: (
+        Background: #111820,
+    ),
+);
+
+@SelectedStyle = ButtonStyle(
+    Default: (
+        Background: #8b3fd1,
+    ),
+    Hovered: (
+        Background: #344354,
+    ),
+    Pressed: (
+        Background: #1a222c,
+    ),
+    Disabled: (
+        Background: #111820,
+    ),
+);
+
+@ErrorStyle = ButtonStyle(
+    Default: (
+        Background: #a83232,
+    ),
+    Hovered: (
+        Background: #344354,
+    ),
+    Pressed: (
+        Background: #1a222c,
+    ),
+    Disabled: (
+        Background: #111820,
+    ),
+);
+
 ItemSlotButton {
     Anchor: (Width: 64, Height: 64);
+    Padding: (Full: 4);
+    Style: @DefaultStyle;
+
     ItemSlot #Item {}
 }

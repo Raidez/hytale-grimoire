@@ -27,6 +27,10 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     private static final String SPELL_ENTRY_UI = "Pages/SpellEntry.ui";
     private static final String WHEEL_SLOT_UI = "Pages/WheelSlot.ui";
 
+    private static final Value<String> DEFAULT_STYLE = Value.ref(WHEEL_SLOT_UI, "DefaultStyle");
+    private static final Value<String> SELECTED_STYLE = Value.ref(WHEEL_SLOT_UI, "SelectedStyle");
+    private static final Value<String> ERROR_STYLE = Value.ref(WHEEL_SLOT_UI, "ErrorStyle");
+
     private final int SLOT_SIZE = 64;
     private final int SLOT_COUNT = 12;
     private final double START_ANGLE = Math.PI / 12;
@@ -208,13 +212,25 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     private void openSlot(Infuse data) {
         LOGGER.atInfo().log("Opening slot: " + data.getSlot());
         selectedSlotIndex = data.getSlot();
-        sendUpdate();
+
+        // Update the style of the selected slot to indicate it is open
+        var commandBuilder = new UICommandBuilder();
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            commandBuilder.set("#WheelPanel[%s].Style".formatted(i), DEFAULT_STYLE);
+        }
+        commandBuilder.set("#WheelPanel[%s].Style".formatted(selectedSlotIndex), SELECTED_STYLE);
+        sendUpdate(commandBuilder);
     }
 
     private void updateSlot(Infuse data) {
         LOGGER.atInfo().log("Updating slot: " + selectedSlotIndex + " with item: " + data.getItemId());
+
+        // Update the item and reset the style of the slot to the default style
         var commandBuilder = new UICommandBuilder();
-        commandBuilder.set("#WheelPanel[" + selectedSlotIndex + "] #Item.ItemId", data.getItemId());
+        commandBuilder.set("#WheelPanel[%s] #Item.ItemId".formatted(selectedSlotIndex), data.getItemId());
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            commandBuilder.set("#WheelPanel[%s].Style".formatted(i), DEFAULT_STYLE);
+        }
         sendUpdate(commandBuilder);
     }
 

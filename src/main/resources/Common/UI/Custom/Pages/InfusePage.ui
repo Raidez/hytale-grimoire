@@ -17,7 +17,7 @@ $Common.@Container {
             Group #WheelPanel {
                 LayoutMode: Full;
                 Anchor: (Width: 500);
-                Background: #ff0000;
+                // Background: #ff0000;
             }
 
             Group #SpellPanel {
@@ -25,14 +25,14 @@ $Common.@Container {
                 Anchor: (Width: 325);
                 Padding: (Left: 20, Right: 10, Top: 100, Bottom: 100);
                 ScrollbarStyle: $Common.@DefaultScrollbarStyle;
-                Background: #0059ff;
+                // Background: #0059ff;
             }
         }
 
         Group #ButtonPanel {
             LayoutMode: Center;
             Anchor: (Height: 70);
-            Background: #36f324;
+            // Background: #36f324;
             
             $Common.@CancelTextButton #CancelButton {
                 @Anchor = (Width: 120);
