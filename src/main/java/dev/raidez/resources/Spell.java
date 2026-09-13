@@ -10,8 +10,10 @@ import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.validation.ValidatorCache;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.common.CommonAssetValidator;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.asset.type.item.config.ItemTranslationProperties;
 import com.hypixel.hytale.server.core.command.system.arguments.types.AssetArgumentType;
 import com.hypixel.hytale.server.core.command.system.arguments.types.SingleArgumentType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -37,8 +39,7 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
     private AssetExtraInfo.Data data;
 
     private String itemId;
-    private String name;
-    private String description;
+    private ItemTranslationProperties translationProperties;
     private int level;
     private float manaCost;
     private float cooldown;
@@ -53,9 +54,10 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
             .append(new KeyedCodec<>("Item", Codec.STRING), Spell::setItemId, Spell::getItemId)
             .addValidator(Item.VALIDATOR_CACHE.getValidator())
             .add()
-            .append(new KeyedCodec<>("Name", Codec.STRING), Spell::setName, Spell::getName)
-            .add()
-            .append(new KeyedCodec<>("Description", Codec.STRING), Spell::setDescription, Spell::getDescription)
+            .append(
+                    new KeyedCodec<>("TranslationProperties", ItemTranslationProperties.CODEC),
+                    Spell::setTranslationProperties,
+                    Spell::getTranslationProperties)
             .add()
             .append(new KeyedCodec<>("Level", Codec.INTEGER), Spell::setLevel, Spell::getLevel)
             .add()
@@ -104,18 +106,6 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
         return spellId + "_Cast";
     }
 
-    /* Constructors */
-
-    private Spell() {
-    }
-
-    public Spell(String name, String description, int level) {
-        this();
-        this.name = name;
-        this.description = description;
-        this.level = level;
-    }
-
     /* Accessors */
 
     @Override
@@ -139,20 +129,20 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
         this.itemId = itemId;
     }
 
-    public String getName() {
-        return name;
+    public Message getName() {
+        return Message.translation(translationProperties.getName());
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Message getDescription() {
+        return Message.translation(translationProperties.getDescription());
     }
 
-    public String getDescription() {
-        return description;
+    public ItemTranslationProperties getTranslationProperties() {
+        return translationProperties;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTranslationProperties(ItemTranslationProperties translationProperties) {
+        this.translationProperties = translationProperties;
     }
 
     public int getLevel() {

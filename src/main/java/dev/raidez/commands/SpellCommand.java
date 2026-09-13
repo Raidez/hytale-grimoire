@@ -126,8 +126,10 @@ public class SpellCommand extends AbstractCommandCollection {
         private final OptionalArg<Spell> spellArg;
 
         enum Which {
-            HAND, // From the item in hand
-            ARGUMENT, // From the spell argument
+            /** From the item in hand */
+            HAND,
+            /** From the spell argument */
+            ARGUMENT,
         }
 
         public CastCommand() {

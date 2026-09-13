@@ -58,14 +58,14 @@
                     "Name": "server.benchCategories.spells"
                 },
                 {
+                    "Id": "LecternBench_Grimoires",
+                    "Icon": "Icons/CraftingCategories/Workbench/Deco_Target.png",
+                    "Name": "server.benchCategories.grimoires"
+                },
+                {
                     "Id": "LecternBench_Misc",
                     "Icon": "Icons/CraftingCategories/Furniture/Misc.png",
                     "Name": "server.benchCategories.misc"
-                },
-                {
-                    "Id": "LecternBench_Colors",
-                    "Icon": "Icons/CraftingCategories/Workbench/Deco_Target.png",
-                    "Name": "server.benchCategories.colors"
                 }
             ],
             "LocalOpenSoundEventId": "SFX_Workbench_Open",

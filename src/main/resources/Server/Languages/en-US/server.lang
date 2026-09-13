@@ -2,8 +2,8 @@ items.bench_lectern.name = Lectern
 items.bench_lectern.desc = A lectern for writing spells and putting them in your grimoire.
 
 benchCategories.spells = Spells
+benchCategories.grimoires = Grimoires
 benchCategories.misc = Misc
-benchCategories.colors = Colors
 
 items.ingredient_magic_ink.name = Magic Ink
 items.ingredient_magic_ink.desc = Ink infused with magical properties, used for writing spells.
@@ -16,3 +16,6 @@ items.weapon_grimoire.desc = A magical book that allows you to store and cast sp
 
 items.scroll_fireball.name = Fireball Spell
 items.scroll_fireball.desc = A powerful fireball spell that deals damage to enemies.
+
+spells.fireball.name = Fireball
+spells.fireball.desc = A powerful fireball spell that deals damage to enemies.

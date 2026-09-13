@@ -2,6 +2,10 @@
     "Item": "Scroll_Fireball",
     "Name": "Fireball",
     "Description": "A powerful fireball spell that deals damage to enemies.",
+    "TranslationProperties": {
+        "Name": "server.spells.fireball.name",
+        "Description": "server.spells.fireball.desc"
+    },
     "Level": 2,
     "ManaCost": 10,
     "Cooldown": 3,

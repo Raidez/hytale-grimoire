@@ -170,9 +170,12 @@ public class GrimoireCommand extends AbstractCommandCollection {
         private final OptionalArg<Integer> slotArg;
 
         enum Operation {
-            ADD, // Infuse a spell into the grimoire in the player's hand
-            REMOVE, // Remove a spell from the grimoire in the player's hand
-            PURGE, // Remove all spells from the grimoire in the player's hand
+            /** Infuse a spell into the grimoire in the player's hand */
+            ADD,
+            /** Remove a spell from the grimoire in the player's hand */
+            REMOVE,
+            /** Remove all spells from the grimoire in the player's hand */
+            PURGE,
         }
 
         public InfuseCommand() {

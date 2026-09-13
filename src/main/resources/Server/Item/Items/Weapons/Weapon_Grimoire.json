@@ -27,7 +27,8 @@
   "Scale": 1.2,
   "Tags": {
     "Type": [
-      "Weapon"
+      "Weapon",
+      "Grimoire"
     ],
     "Family": [
       "Spellbook"
@@ -49,7 +50,7 @@
       {
         "Id": "LecternBench",
         "Categories": [
-          "LecternBench_Misc"
+          "LecternBench_Grimoires"
         ]
       }
     ],

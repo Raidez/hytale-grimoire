@@ -174,8 +174,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             commandBuilder.set("#SpellPanel[%s] #Icon.ItemId".formatted(i),
                     spell.getTexture() != null ? spell.getTexture() : "");
             commandBuilder.set("#SpellPanel[%s] #Name.Text".formatted(i), spell.getName());
-            commandBuilder.set("#SpellPanel[%s].TooltipText".formatted(i),
-                    spell.getDescription() != null ? spell.getDescription() : "");
+            commandBuilder.set("#SpellPanel[%s].TooltipText".formatted(i), spell.getDescription());
             commandBuilder.set("#SpellPanel[%s] #Level.Text".formatted(i), String.valueOf(spell.getLevel()));
             eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,

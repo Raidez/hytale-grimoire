@@ -14,7 +14,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class Utils {
 
     public static boolean isGrimoire(ItemStack is) {
-        return is != null && is.getItemId().equals("Weapon_Grimoire");
+        var tagIndex = AssetRegistry.getOrCreateTagIndex("Grimoire");
+        var tags = is.getItem().getData().getTags();
+        if (!tags.containsKey(tagIndex)) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean isScroll(ItemStack is) {
@@ -25,21 +30,6 @@ public class Utils {
         }
         return true;
     }
-
-    /*
-     * public static Spell getFromItemStack(ItemStack is) {
-     * // Check if the item has spell tag
-     * var tagIndex = AssetRegistry.getOrCreateTagIndex(Spell.SCROLL_TAG);
-     * var tags = is.getItem().getData().getTags();
-     * if (!tags.containsKey(tagIndex)) {
-     * return null;
-     * }
-     * 
-     * // Get the spell
-     * var spell = Spell.getFromItem(is.getItem());
-     * return spell;
-     * }
-     */
 
     /**
      * Create a new interaction context and execute the given interaction.
