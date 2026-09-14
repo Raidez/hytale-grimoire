@@ -310,40 +310,48 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         var commandBuilder = new UICommandBuilder();
         var eventBuilder = new UIEventBuilder();
         var previousItemId = slots[selectedSlotIndex];
+        var isRemoveAction = data.getItemId() == null || data.getItemId().isEmpty();
+        var itemSelector = SLOT_LIST_ID + "[%s] #Item.ItemId".formatted(selectedSlotIndex);
+        var hasPreviousItem = previousItemId != null && !previousItemId.isEmpty();
 
         LOGGER.atInfo().log("Updating slot: %d with item: %s (previous item: %s)",
                 selectedSlotIndex,
                 data.getItemId(),
                 previousItemId);
+        
+        // Update the slot variable
         slots[selectedSlotIndex] = data.getItemId();
 
-        // If there was a previous item in the slot, add it back to the spell list and
-        // rebuild its entry in the UI
-        if (previousItemId != null && !previousItemId.isEmpty()) {
-            var item = Item.getAssetMap().getAsset(previousItemId);
-            var spell = Spell.getFromItem(item);
-            spellList.add(spell.getId());
-            buildSpellList(commandBuilder, eventBuilder);
-        }
-
-        // Update the item and reset the style of the slot to the default style
-        var itemSelector = SLOT_LIST_ID + "[%s] #Item.ItemId".formatted(selectedSlotIndex);
-        if (data.getItemId() == null || data.getItemId().isEmpty()) {
-            commandBuilder.setNull(itemSelector);
-        } else {
-            commandBuilder.set(itemSelector, data.getItemId());
-        }
+        // Reset the slot style
         commandBuilder.set(SLOT_LIST_ID + "[%s].Style".formatted(selectedSlotIndex), DEFAULT_STYLE);
 
-        // Hide the spell panel and update the spell list if necessary
+        // Hide the spell panel
         commandBuilder.set(SPELL_PANEL_ID + ".Visible", false);
+
+        // Remove the spell from the spell list
         if (data.getSlot() >= 0) {
             spellList.remove(data.getSlot());
             buildSpellList(commandBuilder, eventBuilder);
         }
 
-        sendUpdate(commandBuilder, eventBuilder, false);
+        if (isRemoveAction) {
+            // Set slot to null
+            commandBuilder.setNull(itemSelector);
+
+            // If there was a previous item in the slot, add it back to the spell list and rebuild its entry in the UI
+            if (hasPreviousItem) {
+                var spell = Spell.getFromItem(Item.getAssetMap().getAsset(previousItemId));
+                spellList.add(spell.getId());
+                buildSpellList(commandBuilder, eventBuilder);
+            }
+
+        } else {
+            // Update the item in slot
+            commandBuilder.set(itemSelector, data.getItemId());
+        }
+    
         selectedSlotIndex = -1;
+        sendUpdate(commandBuilder, eventBuilder, false);
     }
 
     private void infuse() {
