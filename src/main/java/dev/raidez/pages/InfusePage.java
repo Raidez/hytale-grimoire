@@ -106,29 +106,19 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         buildSpellList(commandBuilder, eventBuilder);
 
         // Bind global events
-        eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                EMPTY_BUTTON_ID,
-                new EventData()
-                        .append("Action", Infuse.Action.UpdateSlot)
-                        .append("ItemId", "")
-                        .append("Slot", "-1"));
-        eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                CANCEL_BUTTON_ID,
-                new EventData().append("Action", Infuse.Action.Cancel));
-        eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                INFUSE_BUTTON_ID,
-                new EventData().append("Action", Infuse.Action.Infuse));
+        bindGlobalEvents(eventBuilder);
     }
 
     @Override
     public void handleDataEvent(Ref<EntityStore> ref, Store<EntityStore> store, Infuse data) {
         switch (data.getAction()) {
+            // Close the page without changes
             case Cancel -> close();
+            // Open the specified slot for infusion
             case OpenSlot -> openSlot(data);
+            // Update the specified slot with new data
             case UpdateSlot -> updateSlot(data);
+            // Perform the infusion action
             case Infuse -> infuse();
         }
     }
@@ -143,11 +133,13 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             UICommandBuilder commandBuilder,
             UIEventBuilder eventBuilder) {
 
-        LOGGER.atInfo().log("Building slot wheel with " + SLOT_COUNT + " slots.");
+        LOGGER.atInfo().log("Building slot wheel with %d slots.", SLOT_COUNT);
 
         for (int i = 0; i < SLOT_COUNT; i++) {
+            // Calculate the position for the current slot in the wheel
             var slotPos = calculateSlotPositions(i, 0, 0, 500, 500, 20);
 
+            // Create and configure the anchor for the current slot
             var anchor = new Anchor();
             anchor.setLeft(Value.of(slotPos.x));
             anchor.setTop(Value.of(slotPos.y));
@@ -158,7 +150,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             commandBuilder.append(SLOT_LIST_ID, WHEEL_SLOT_UI);
             commandBuilder.setObject(SLOT_LIST_ID + "[%s].Anchor".formatted(i), anchor);
 
-            // Bind the slot to the corresponding event
+            // Bind the event for opening the slot when the wheel slot is activated
             eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     SLOT_LIST_ID + "[%s]".formatted(i),
@@ -175,7 +167,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
     }
 
     /**
-     * Builds the spell list for the infuse page.
+     * Re/builds the spell list for the infuse page.
      * 
      * @param commandBuilder
      * @param eventBuilder
@@ -185,19 +177,25 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             UIEventBuilder eventBuilder) {
 
         LOGGER.atInfo().log("Building spell list with %d spells.", spellList.size());
+
+        // Clear the existing spell list before rebuilding it.
         commandBuilder.clear(SPELL_LIST_ID);
 
         int i = 0;
         for (String spellId : spellList) {
             var spell = Spell.getAssetMap().getAsset(spellId);
 
+            // Append the spell entry UI to the spell list
             commandBuilder.append(SPELL_LIST_ID, SPELL_ENTRY_UI);
 
+            // Set the UI elements for the spell entry
             var spellSelector = SPELL_LIST_ID + "[%s]".formatted(i);
             commandBuilder.set(spellSelector + " #Icon.ItemId", spell.getTexture() != null ? spell.getTexture() : "");
             commandBuilder.set(spellSelector + " #Name.Text", spell.getName());
             commandBuilder.set(spellSelector + ".TooltipText", spell.getDescription());
             commandBuilder.set(spellSelector + " #Level.Text", String.valueOf(spell.getLevel()));
+
+            // Bind the event for updating the slot when the spell is activated
             eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     spellSelector,
@@ -208,6 +206,36 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             i++;
         }
     }
+
+    /**
+     * Binds the global events for the infuse page,
+     * including remove spell, cancel, and infuse buttons.
+     * 
+     * @param eventBuilder
+     */
+    private void bindGlobalEvents(UIEventBuilder eventBuilder) {
+        LOGGER.atInfo().log("Binding global events for infuse page.");
+
+        eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                EMPTY_BUTTON_ID,
+                new EventData()
+                        .append("Action", Infuse.Action.UpdateSlot)
+                        .append("ItemId", "")
+                        .append("Slot", "-1"));
+        
+        eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                CANCEL_BUTTON_ID,
+                new EventData().append("Action", Infuse.Action.Cancel));
+        
+        eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                INFUSE_BUTTON_ID,
+                new EventData().append("Action", Infuse.Action.Infuse));
+    }
+
+    /* Helper Methods */
 
     /**
      * Calculates the top-left position of a slot in a circular layout
@@ -272,7 +300,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         selectedSlotIndex = data.getSlot();
         commandBuilder.set(SLOT_LIST_ID + "[%s].Style".formatted(selectedSlotIndex), SELECTED_STYLE);
 
-        // Show the spell panel for the selected slot
+        // Show the spell panel
         commandBuilder.set(SPELL_PANEL_ID + ".Visible", true);
 
         sendUpdate(commandBuilder);
