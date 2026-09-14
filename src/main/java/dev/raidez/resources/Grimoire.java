@@ -6,6 +6,9 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 
+/**
+ * Grimoire metadata
+ */
 public class Grimoire {
 
     private String[] spellList;

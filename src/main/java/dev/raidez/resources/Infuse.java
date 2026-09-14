@@ -5,6 +5,9 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 
+/**
+ * Infuse UI
+ */
 public class Infuse {
 
     public enum Action {

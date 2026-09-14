@@ -19,6 +19,9 @@ import com.hypixel.hytale.server.core.command.system.arguments.types.SingleArgum
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 
+/**
+ * Spell asset
+ */
 public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, Spell>> {
 
     public static final SingleArgumentType<Spell> SPELL_ASSET = new AssetArgumentType<>("", Spell.class, "");
@@ -103,7 +106,8 @@ public class Spell implements JsonAssetWithMap<String, DefaultAssetMap<String, S
      * @return
      */
     public static String getCastInteractionId(String spellId) {
-        return spellId + "_Cast";
+        var hash = Integer.toHexString(spellId.hashCode());
+        return spellId + "_Cast_" + hash;
     }
 
     /* Accessors */
