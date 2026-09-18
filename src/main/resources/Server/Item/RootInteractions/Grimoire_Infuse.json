@@ -1,0 +1,14 @@
+{
+  "Interactions": [
+    {
+      "Type": "BlockCondition",
+      "Matchers": [
+        {
+          "Block": {
+            "Id": "Bench_Lectern"
+          }
+        }
+      ]
+    }
+  ]
+}

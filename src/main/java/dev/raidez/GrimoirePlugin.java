@@ -11,11 +11,14 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 
 import dev.raidez.commands.GrimoireCommand;
 import dev.raidez.commands.SpellCommand;
-import dev.raidez.handlers.GenerateSpellChainHandler;
-import dev.raidez.handlers.GrimoireInventoryChangeHandler;
+import dev.raidez.handlers.LoadSpellHandler;
+import dev.raidez.handlers.PickupGrimoireHandler;
+import dev.raidez.handlers.PlaceLecternHandler;
 import dev.raidez.interactions.CastInteraction;
 import dev.raidez.interactions.GrimoireCastInteraction;
 import dev.raidez.interactions.GrimoireSlotInteraction;
+import dev.raidez.interactions.LecternHoldInteraction;
+import dev.raidez.resources.Lectern;
 import dev.raidez.resources.Spell;
 
 public class GrimoirePlugin extends JavaPlugin {
@@ -39,9 +42,9 @@ public class GrimoirePlugin extends JavaPlugin {
                         .build());
 
         // Register handlers
-        getEventRegistry().register(LoadedAssetsEvent.class, Spell.class, GenerateSpellChainHandler::onSpellLoad);
-        getEventRegistry().register(RemovedAssetsEvent.class, Spell.class, GenerateSpellChainHandler::onSpellRemove);
-        getEntityStoreRegistry().registerSystem(new GrimoireInventoryChangeHandler());
+        getEventRegistry().register(LoadedAssetsEvent.class, Spell.class, LoadSpellHandler::onSpellLoad);
+        getEventRegistry().register(RemovedAssetsEvent.class, Spell.class, LoadSpellHandler::onSpellRemove);
+        getEntityStoreRegistry().registerSystem(new PickupGrimoireHandler());
 
         // Register commands
         getCommandRegistry().registerCommand(new GrimoireCommand());
@@ -54,6 +57,11 @@ public class GrimoirePlugin extends JavaPlugin {
                 GrimoireSlotInteraction.class, GrimoireSlotInteraction.CODEC);
         getCodecRegistry(Interaction.CODEC).register("GrimoireCast",
                 GrimoireCastInteraction.class, GrimoireCastInteraction.CODEC);
+        getCodecRegistry(Interaction.CODEC).register("LecternHold",
+                LecternHoldInteraction.class, LecternHoldInteraction.CODEC);
+
+        // Register components
+        getChunkStoreRegistry().registerComponent(Lectern.class, Lectern::new);
     }
 
     public static GrimoirePlugin get() {

@@ -31,7 +31,7 @@ public class GrimoireCastInteraction extends SimpleInstantInteraction {
 
         // Check if the player is holding a grimoire
         var is = context.getHeldItem();
-        if (!Utils.isGrimoire(is)) {
+        if (is == null || !Utils.isGrimoire(is)) {
             LOGGER.atWarning().log("GrimoireCastInteraction: Entity is not holding a grimoire");
             return;
         }

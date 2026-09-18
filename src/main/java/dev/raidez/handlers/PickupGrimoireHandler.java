@@ -23,13 +23,17 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.raidez.GrimoirePlugin;
 import dev.raidez.resources.Grimoire;
 
-public class GrimoireInventoryChangeHandler extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
+/**
+ * Add metadata to picked up grimoires
+ * (crafted, looted, traded, found, etc.).
+ */
+public class PickupGrimoireHandler extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
     private final HytaleLogger LOGGER = GrimoirePlugin.get().getLogger();
 
     private final Query<EntityStore> query;
 
-    public GrimoireInventoryChangeHandler() {
+    public PickupGrimoireHandler() {
         super(InventoryChangeEvent.class);
         query = Archetype.of(Player.getComponentType(), PlayerRef.getComponentType());
     }
@@ -47,6 +51,7 @@ public class GrimoireInventoryChangeHandler extends EntityEventSystem<EntityStor
             CommandBuffer<EntityStore> commandBuffer,
             InventoryChangeEvent event) {
 
+        var wasModified = false;
         for (var slotTransaction : extractSlotTransactions(event.getTransaction())) {
 
             // Check if the slot transaction succeeded
@@ -65,7 +70,12 @@ public class GrimoireInventoryChangeHandler extends EntityEventSystem<EntityStor
             // Replace the grimoire with metadata
             var slot = slotTransaction.getSlot();
             event.getItemContainer().replaceItemStackInSlot(slot, is, ensureMetadata(is));
-            LOGGER.atInfo().log("Replaced grimoire with metadata in slot: " + slot);
+            LOGGER.atInfo().log("PickupGrimoireHandler: Replaced grimoire with metadata in slot: " + slot);
+            wasModified = true;
+        }
+
+        if (!wasModified) {
+            LOGGER.atWarning().log("PickupGrimoireHandler: Inventory was not modified with grimoires metadata.");
         }
     }
 

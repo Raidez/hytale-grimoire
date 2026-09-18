@@ -17,7 +17,10 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Roo
 import dev.raidez.GrimoirePlugin;
 import dev.raidez.resources.Spell;
 
-public class GenerateSpellChainHandler {
+/**
+ * Generate cast interactions for spell assets.
+ */
+public class LoadSpellHandler {
 
     private static final String CAST_CHAIN_TEMPLATE = readResource("/spell_cast_chain.json");
 
@@ -59,7 +62,7 @@ public class GenerateSpellChainHandler {
         // Load all generated cast interactions into the asset store
         if (!chains.isEmpty()) {
             var result = store.loadAssets(DefaultAssetMap.DEFAULT_PACK_KEY, chains);
-            LOGGER.atInfo().log("GenerateSpellChainHandler: Loaded %d cast interaction(s), %d failed: %s",
+            LOGGER.atWarning().log("GenerateSpellChainHandler: Loaded %d cast interaction(s), %d failed: %s",
                     result.getLoadedAssets().size(), result.getFailedToLoadKeys().size(),
                     result.getFailedToLoadKeys());
         }

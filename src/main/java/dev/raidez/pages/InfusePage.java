@@ -223,12 +223,12 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
                         .append("Action", Infuse.Action.UpdateSlot)
                         .append("ItemId", "")
                         .append("Slot", "-1"));
-        
+
         eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 CANCEL_BUTTON_ID,
                 new EventData().append("Action", Infuse.Action.Cancel));
-        
+
         eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 INFUSE_BUTTON_ID,
@@ -318,7 +318,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
                 selectedSlotIndex,
                 data.getItemId(),
                 previousItemId);
-        
+
         // Update the slot variable
         slots[selectedSlotIndex] = data.getItemId();
 
@@ -338,7 +338,8 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             // Set slot to null
             commandBuilder.setNull(itemSelector);
 
-            // If there was a previous item in the slot, add it back to the spell list and rebuild its entry in the UI
+            // If there was a previous item in the slot, add it back to the spell list and
+            // rebuild its entry in the UI
             if (hasPreviousItem) {
                 var spell = Spell.getFromItem(Item.getAssetMap().getAsset(previousItemId));
                 spellList.add(spell.getId());
@@ -349,7 +350,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
             // Update the item in slot
             commandBuilder.set(itemSelector, data.getItemId());
         }
-    
+
         selectedSlotIndex = -1;
         sendUpdate(commandBuilder, eventBuilder, false);
     }

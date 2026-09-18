@@ -71,6 +71,7 @@
   },
   "Interactions": {
     "Primary": "Grimoire_Cast",
-    "Secondary": "Grimoire_Slot"
+    "Secondary": "Grimoire_Slot",
+    "Use": "Grimoire_Infuse"
   }
 }
