@@ -175,17 +175,17 @@ support.
 	- [ ] Add item generator based on spell asset type
 	- [ ] Update spell give command to generate scroll item based on spell asset type
 - [ ] Make custom UI to select spells in grimoire
+
+### WIP
+
 - [ ] Lectern
 	- [ ] Make model for lectern
 	- [ ] Make alt model lectern with book on top
 	- [ ] Add lectern state to switch between infuse mode or craft mode
 
-### WIP
-
-- [ ] Make custom UI to infuse spells in lectern
-
 ### DONE
 
+- [x] Make custom UI to infuse spells in lectern
 - [x] Make root interaction with custom data (cast time, mana cost, cooldown, etc.)
 - [x] Put metadata in grimoire when crafting it (InventoryChangeEvent)
 

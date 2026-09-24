@@ -87,7 +87,7 @@ public class SpellCommand extends AbstractCommandCollection {
 
             // Check if the player is holding an item
             var is = InventoryComponent.getItemInHand(store, ref);
-            if (is == null || !Utils.isScroll(is)) {
+            if (!Utils.isScroll(is)) {
                 commandContext.sendMessage(Message.raw("You must hold a scroll!"));
                 return;
             }
@@ -165,7 +165,7 @@ public class SpellCommand extends AbstractCommandCollection {
 
                 // Check if the player is holding a scroll
                 var is = InventoryComponent.getItemInHand(store, ref);
-                if (is == null || !Utils.isScroll(is)) {
+                if (!Utils.isScroll(is)) {
                     commandContext.sendMessage(Message.raw("You must hold a scroll!"));
                     return;
                 }

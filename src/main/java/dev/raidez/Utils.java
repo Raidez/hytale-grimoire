@@ -4,6 +4,7 @@ import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -14,6 +15,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class Utils {
 
     public static boolean isGrimoire(ItemStack is) {
+        if (is == null) {
+            return false;
+        }
+
         var tagIndex = AssetRegistry.getOrCreateTagIndex("Grimoire");
         var tags = is.getItem().getData().getTags();
         if (!tags.containsKey(tagIndex)) {
@@ -23,12 +28,25 @@ public class Utils {
     }
 
     public static boolean isScroll(ItemStack is) {
+        if (is == null) {
+            return false;
+        }
+
         var tagIndex = AssetRegistry.getOrCreateTagIndex("Scroll");
         var tags = is.getItem().getData().getTags();
         if (!tags.containsKey(tagIndex)) {
             return false;
         }
         return true;
+    }
+
+    public static boolean isLectern(BlockType blockType) {
+        if (blockType == null) {
+            return false;
+        }
+
+        return blockType.getId().equals("Bench_Lectern")
+                || blockType.getId().startsWith("*Bench_Lectern");
     }
 
     /**

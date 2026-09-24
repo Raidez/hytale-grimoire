@@ -5,7 +5,6 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 
@@ -38,7 +37,7 @@ public class LecternHoldInteraction extends SimpleInstantInteraction {
 
         // Check if the player is holding a grimoire
         var is = context.getHeldItem();
-        if (is == null || !Utils.isGrimoire(is)) {
+        if (!Utils.isGrimoire(is)) {
             LOGGER.atWarning().log("LecternHoldInteraction: Entity is not holding a grimoire");
             return;
         }
@@ -48,6 +47,7 @@ public class LecternHoldInteraction extends SimpleInstantInteraction {
         // Add lectern component on the bench
 
         // Remove grimoire from the player's hand
-        inventory.getInventory().replaceItemStackInSlot(inventory.getActiveSlot(), is, ItemStack.EMPTY);
+        // inventory.getInventory().replaceItemStackInSlot(inventory.getActiveSlot(),
+        // is, ItemStack.EMPTY);
     }
 }

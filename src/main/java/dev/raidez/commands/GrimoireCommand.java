@@ -17,14 +17,13 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import dev.raidez.Utils;
-import dev.raidez.pages.InfusePage;
 import dev.raidez.resources.Grimoire;
 import dev.raidez.resources.Spell;
 
 public class GrimoireCommand extends AbstractCommandCollection {
 
     public GrimoireCommand() {
-        super("grimoire", "Grimoire commande");
+        super("grimoire", "Grimoire command");
         addSubCommand(new GiveCommand());
         addSubCommand(new SlotCommand());
         addSubCommand(new CastCommand());
@@ -270,7 +269,7 @@ public class GrimoireCommand extends AbstractCommandCollection {
     class UICommand extends AbstractPlayerCommand {
 
         public UICommand() {
-            super("ui", "Open the infuse UI page");
+            super("ui", "Open the slot UI page");
         }
 
         @Override
@@ -285,20 +284,17 @@ public class GrimoireCommand extends AbstractCommandCollection {
 
             // Check if the player is holding a grimoire
             var is = InventoryComponent.getItemInHand(store, ref);
-            if (Utils.isGrimoire(is)) {
-                // Get the grimoire metadata from the item in hand
-                var grimoire = is.getFromMetadataOrDefault(Grimoire.KEY, Grimoire.CODEC);
-
-                // Open the infuse UI page with the current spells from the grimoire
-                var page = new InfusePage(playerRef, grimoire.getScrollList());
-                player.getPageManager().openCustomPage(ref, store, page);
+            if (!Utils.isGrimoire(is)) {
+                commandContext.sendMessage(Message.raw("You must hold a grimoire to open the slot UI page!"));
                 return;
             }
 
-            // Open the infuse UI page
-            var page = new InfusePage(playerRef);
-            player.getPageManager().openCustomPage(ref, store, page);
+            // Get the grimoire metadata from the item in hand
+            var grimoire = is.getFromMetadataOrDefault(Grimoire.KEY, Grimoire.CODEC);
 
+            // Open the slot UI page with the current spells from the grimoire
+            // var page = new InfusePage(playerRef, grimoire.getScrollList());
+            // player.getPageManager().openCustomPage(ref, store, page);
         }
 
     }

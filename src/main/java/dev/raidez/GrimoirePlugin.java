@@ -3,17 +3,19 @@ package dev.raidez;
 import com.hypixel.hytale.assetstore.event.LoadedAssetsEvent;
 import com.hypixel.hytale.assetstore.event.RemovedAssetsEvent;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
 import dev.raidez.commands.GrimoireCommand;
+import dev.raidez.commands.LecternCommand;
 import dev.raidez.commands.SpellCommand;
 import dev.raidez.handlers.LoadSpellHandler;
 import dev.raidez.handlers.PickupGrimoireHandler;
-import dev.raidez.handlers.PlaceLecternHandler;
 import dev.raidez.interactions.CastInteraction;
 import dev.raidez.interactions.GrimoireCastInteraction;
 import dev.raidez.interactions.GrimoireSlotInteraction;
@@ -22,6 +24,8 @@ import dev.raidez.resources.Lectern;
 import dev.raidez.resources.Spell;
 
 public class GrimoirePlugin extends JavaPlugin {
+
+    private ComponentType<ChunkStore, Lectern> lecternComponentType;
 
     private static GrimoirePlugin instance;
 
@@ -49,6 +53,7 @@ public class GrimoirePlugin extends JavaPlugin {
         // Register commands
         getCommandRegistry().registerCommand(new GrimoireCommand());
         getCommandRegistry().registerCommand(new SpellCommand());
+        getCommandRegistry().registerCommand(new LecternCommand());
 
         // Register interactions
         getCodecRegistry(Interaction.CODEC).register("Cast",
@@ -61,11 +66,15 @@ public class GrimoirePlugin extends JavaPlugin {
                 LecternHoldInteraction.class, LecternHoldInteraction.CODEC);
 
         // Register components
-        getChunkStoreRegistry().registerComponent(Lectern.class, Lectern::new);
+        this.lecternComponentType = getChunkStoreRegistry().registerComponent(Lectern.class, Lectern::new);
     }
 
     public static GrimoirePlugin get() {
         return instance;
+    }
+
+    public ComponentType<ChunkStore, Lectern> getLecternComponentType() {
+        return this.lecternComponentType;
     }
 
 }

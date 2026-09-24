@@ -76,7 +76,7 @@ public class InfusePage extends InteractiveCustomUIPage<Infuse> {
         var inventory = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
         for (short slot = 0; slot < inventory.getCapacity(); slot++) {
             var is = inventory.getItemStack(slot);
-            if (is == null || !Utils.isScroll(is)) {
+            if (!Utils.isScroll(is)) {
                 continue;
             }
 
