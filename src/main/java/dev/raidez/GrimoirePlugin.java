@@ -66,7 +66,8 @@ public class GrimoirePlugin extends JavaPlugin {
                 LecternHoldInteraction.class, LecternHoldInteraction.CODEC);
 
         // Register components
-        this.lecternComponentType = getChunkStoreRegistry().registerComponent(Lectern.class, Lectern::new);
+        this.lecternComponentType = getChunkStoreRegistry()
+                .registerComponent(Lectern.class, "grimoire:lectern", Lectern.CODEC);
     }
 
     public static GrimoirePlugin get() {

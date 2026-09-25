@@ -72,25 +72,18 @@ public class LecternCommand extends AbstractCommandCollection {
             var inventory = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
             var is = inventory.getActiveItem();
             if (!Utils.isGrimoire(is)) {
-                commandContext.sendMessage(Message.raw("You must hold a grimoire to change the slot!"));
-                return;
-            }
-
-            // Get the targeted block position
-            var blockPos = TargetUtil.getTargetBlock(ref, 8.0, store);
-            if (blockPos == null) {
-                commandContext.sendMessage(Message.raw("You must target a block!"));
+                commandContext.sendMessage(Message.raw("You must hold a grimoire to deposit it!"));
                 return;
             }
 
             // Ensure that a lectern was targeted
-            var blockType = world.getBlockType(blockPos);
+            var blockPos = TargetUtil.getTargetBlock(ref, 8.0, store);
+            var blockType = (blockPos != null) ? world.getBlockType(blockPos) : null;
             if (!Utils.isLectern(blockType)) {
                 commandContext.sendMessage(Message.raw("You must target a lectern to deposit the grimoire!"));
                 return;
             }
 
-            // world.execute(() -> {
             // Get the block entity reference for the targeted lectern
             var blockRef = BlockModule.getBlockEntity(world, blockPos.x, blockPos.y, blockPos.z);
             if (blockRef == null) {
@@ -107,7 +100,6 @@ public class LecternCommand extends AbstractCommandCollection {
 
             // Remove grimoire from the player's hand
             inventory.getInventory().replaceItemStackInSlot(inventory.getActiveSlot(), is, ItemStack.EMPTY);
-            // });
 
         }
 
@@ -130,15 +122,9 @@ public class LecternCommand extends AbstractCommandCollection {
             var chunkStore = world.getChunkStore().getStore();
             var inventory = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
 
-            // Get the targeted block position
-            var blockPos = TargetUtil.getTargetBlock(ref, 8.0, store);
-            if (blockPos == null) {
-                commandContext.sendMessage(Message.raw("You must target a block!"));
-                return;
-            }
-
             // Ensure that a lectern was targeted
-            var blockType = world.getBlockType(blockPos);
+            var blockPos = TargetUtil.getTargetBlock(ref, 8.0, store);
+            var blockType = (blockPos != null) ? world.getBlockType(blockPos) : null;
             if (!Utils.isLectern(blockType)) {
                 commandContext.sendMessage(Message.raw("You must target a lectern to pickup the grimoire!"));
                 return;
@@ -151,8 +137,7 @@ public class LecternCommand extends AbstractCommandCollection {
                 return;
             }
 
-            // world.execute(() -> {
-            // Add the lectern component to the chunk store
+            // Get the lectern component from the chunk store
             var lectern = chunkStore.ensureAndGetComponent(blockRef, Lectern.getComponentType());
             var is = lectern.pickup();
 
@@ -166,7 +151,6 @@ public class LecternCommand extends AbstractCommandCollection {
 
             // Add grimoire from the player's hand
             inventory.getInventory().addItemStack(is);
-            // });
         }
 
     }
