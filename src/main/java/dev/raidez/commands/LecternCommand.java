@@ -66,6 +66,8 @@ public class LecternCommand extends AbstractCommandCollection {
                 PlayerRef playerRef,
                 World world) {
 
+            var chunkStore = world.getChunkStore().getStore();
+
             // Check if the player is holding a grimoire
             var inventory = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
             var is = inventory.getActiveItem();
@@ -88,22 +90,25 @@ public class LecternCommand extends AbstractCommandCollection {
                 return;
             }
 
+            // world.execute(() -> {
+            // Get the block entity reference for the targeted lectern
+            var blockRef = BlockModule.getBlockEntity(world, blockPos.x, blockPos.y, blockPos.z);
+            if (blockRef == null) {
+                commandContext.sendMessage(Message.raw("Failed to get the lectern entity!"));
+                return;
+            }
+
             // Change lectern state to hold the grimoire (visual)
             world.setBlockInteractionState(blockPos, blockType, "InfuseMode");
 
-            // Add lectern component on the bench
-            var holder = world.getBlockComponentHolder(blockPos.x, blockPos.y, blockPos.z);
-            var lectern = holder.ensureAndGetComponent(Lectern.getComponentType());
+            // Add the lectern component to the chunk store
+            var lectern = chunkStore.ensureAndGetComponent(blockRef, Lectern.getComponentType());
             lectern.deposit(is);
-
-            // Not tested
-            // var blockRef = BlockModule.getBlockEntity(world, blockPos.x, blockPos.y,
-            // blockPos.z);
-            // var chunkStore = world.getChunkStore().getStore();
-            // chunkStore.addComponent(blockRef, Lectern.getComponentType(), lectern);
 
             // Remove grimoire from the player's hand
             inventory.getInventory().replaceItemStackInSlot(inventory.getActiveSlot(), is, ItemStack.EMPTY);
+            // });
+
         }
 
     }
@@ -122,6 +127,7 @@ public class LecternCommand extends AbstractCommandCollection {
                 PlayerRef playerRef,
                 World world) {
 
+            var chunkStore = world.getChunkStore().getStore();
             var inventory = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
 
             // Get the targeted block position
@@ -138,16 +144,29 @@ public class LecternCommand extends AbstractCommandCollection {
                 return;
             }
 
+            // Get the block entity reference for the targeted lectern
+            var blockRef = BlockModule.getBlockEntity(world, blockPos.x, blockPos.y, blockPos.z);
+            if (blockRef == null) {
+                commandContext.sendMessage(Message.raw("Failed to get the lectern entity!"));
+                return;
+            }
+
+            // world.execute(() -> {
+            // Add the lectern component to the chunk store
+            var lectern = chunkStore.ensureAndGetComponent(blockRef, Lectern.getComponentType());
+            var is = lectern.pickup();
+
+            if (!Utils.isGrimoire(is)) {
+                commandContext.sendMessage(Message.raw("The lectern does not contain a grimoire!"));
+                return;
+            }
+
             // Change lectern state to not hold the grimoire (visual)
             world.setBlockInteractionState(blockPos, blockType, "default");
 
-            // Remove lectern component on the bench
-            var holder = world.getBlockComponentHolder(blockPos.x, blockPos.y, blockPos.z);
-            var lectern = holder.ensureAndGetComponent(Lectern.getComponentType());
-            var is = lectern.pickup();
-
             // Add grimoire from the player's hand
             inventory.getInventory().addItemStack(is);
+            // });
         }
 
     }
