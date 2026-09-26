@@ -19,7 +19,9 @@ import dev.raidez.handlers.PickupGrimoireHandler;
 import dev.raidez.interactions.CastInteraction;
 import dev.raidez.interactions.GrimoireCastInteraction;
 import dev.raidez.interactions.GrimoireSlotInteraction;
-import dev.raidez.interactions.LecternHoldInteraction;
+import dev.raidez.interactions.LecternDepositInteraction;
+import dev.raidez.interactions.LecternInfuseInteraction;
+import dev.raidez.interactions.LecternPickupInteraction;
 import dev.raidez.resources.Lectern;
 import dev.raidez.resources.Spell;
 
@@ -62,8 +64,12 @@ public class GrimoirePlugin extends JavaPlugin {
                 GrimoireSlotInteraction.class, GrimoireSlotInteraction.CODEC);
         getCodecRegistry(Interaction.CODEC).register("GrimoireCast",
                 GrimoireCastInteraction.class, GrimoireCastInteraction.CODEC);
-        getCodecRegistry(Interaction.CODEC).register("LecternHold",
-                LecternHoldInteraction.class, LecternHoldInteraction.CODEC);
+        getCodecRegistry(Interaction.CODEC).register("LecternDeposit",
+                LecternDepositInteraction.class, LecternDepositInteraction.CODEC);
+        getCodecRegistry(Interaction.CODEC).register("LecternInfuse",
+                LecternInfuseInteraction.class, LecternInfuseInteraction.CODEC);
+        getCodecRegistry(Interaction.CODEC).register("LecternPickup",
+                LecternPickupInteraction.class, LecternPickupInteraction.CODEC);
 
         // Register components
         this.lecternComponentType = getChunkStoreRegistry()

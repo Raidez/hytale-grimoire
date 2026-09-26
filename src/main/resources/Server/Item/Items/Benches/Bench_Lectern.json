@@ -101,9 +101,14 @@
     "State": {
       "Definitions": {
         "InfuseMode": {
-          "CustomModel": "Items/Instruments/Banjo/Banjo.blockymodel",
+          "CustomModel": "Blocks/Benches/Alchemy.blockymodel",
+          "CustomModelTexture": [
+            {
+              "Texture": "Blocks/Benches/Alchemy_Texture.png"
+            }
+          ],
           "Interactions": {
-            "Use": "Lectern_Hold"
+            "Use": "Lectern_Infuse"
           }
         }
       }
